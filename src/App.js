@@ -2,43 +2,15 @@ import React, { Component } from 'react';
 import './App.css';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-
-const rawData = [{
-    account: '25US',
-    status: 'AI',
-    rating: 98
-}, {
-    account: '47UK',
-    status: 'Suspend',
-    rating: 97
-}, {
-    account: '110CA',
-    status: 'AA',
-    rating: 95
-}];
-// const requestData = (pageSize, page, sorted, filtered) => {
-//     return new Promise((resolve, reject) => {
-//         let filteredData = rawData;
-//         if (filtered.length) {
-//             filteredData = filtered.reduce((filteredSoFar, nextFilter) => {
-//                 return filteredSoFar.filter(row => {
-//                     return (row[nextFilter.id] + "").include(nextFilter.value);
-//                 });
-//             }, filteredData);
-//         }
-//         const res = {
-//             rows: filteredData.slice(pageSize * page, pageSize * page + pageSize),
-//             pages: Math.ceil(filteredData.length / pageSize)
-//         };
-//         setTimeout(() => resolve(res), 500);
-//     });
-// }
+var api = require('../utils/api.js');
+const rawData = [];
 class AccountLog extends React.Component {
     constructor() {
         super();
         this.state = {
             data: rawData,
-            account: '25US',
+            account: '',
+            country: '',
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -50,59 +22,163 @@ class AccountLog extends React.Component {
                 value: 'AA'
             }],
             loading: true
-        }
+        };
+
+    }
+    componentDidMount () {
+        api.fetchAccountLogs(this.state.account, this.state.country)
+            .then(function (res) {
+                this.setState({data: res});
+            }.bind(this));
     }
     search() {
-        debugger
         console.log('this.state', this.state);
         const BASE_URL = 'http://localhost:3002/api/v1/account_logs?access_token=b41127cf658eeb348ebc5a9513826bb0'
         const FETCH_URL = `${BASE_URL}&account=${this.state.account}&log_date=${this.state.log_date}`;
         console.log('FETCH_URL', FETCH_URL);
     }
-    // fetchData(state, instance) {
-    //     this.setState({ loading: true});
-    //     requestData(
-    //         state.pageSize,
-    //         state.page,
-    //         state.sorted,
-    //         state.filtered
-    //     ).then(res => {
-    //         this.setState({
-    //             data: res.rows,
-    //             pages: res.pages,
-    //             loading: false
-    //         });
-    //     });
-    // }
     handleChange(e) {
         this.setState({account: e.target.value})
         console.log(this.state.account)
     }
     render() {
         const columns = [{
-            Header: 'Account',
-            accessor: 'account'
+            Header: 'Account Name',
+            accessor: 'account_name'
+        }, {
+            Header: 'Country',
+            accessor: 'country'
+        }, {
+            Header: 'Date',
+            accessor: 'log_date'
         }, {
             Header: 'Status',
-            accessor: 'status'
+            accessor: 'status',
+            Cell: row => (
+                    <div
+                        style={{
+                            width: `${row.value}%`,
+                            height: '100%',
+                            backgroundColor: row.value === "AA" ? '#85cc00'
+                                : row.value === "AI" ? '#ffbf00'
+                                    : row.value === "Login Blocked" ? '#dadada'
+                                    : '#ff2e00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out'
+                        }}
+                    >{row.value}</div>
+            )
         }, {
-            Header: 'Rating',
-            accessor: 'rating'
-        }]
+            Header: 'ODR',
+            accessor: 'odr_short',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value*20}%`,
+                            height: '100%',
+                            backgroundColor: row.value < 0.5 ? '#85cc00'
+                                : row.value > 1 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out'
+                        }}
+                    >{row.value}</div>
+                </div>
+            )
+        }, {
+            Header: 'Orders 7',
+            accessor: 'order_7d'
+        }, {
+            Header: 'Orders 30',
+            accessor: 'order_30d'
+        }, {
+            Header: 'Feedback 30',
+            accessor: 'feedback_30d'
+        }, {
+            Header: 'Rating 30',
+            accessor: 'rating_30d',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value}%`,
+                            height: '100%',
+                            backgroundColor: row.value > 95 ? '#85cc00'
+                                : row.value < 90 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out'
+                        }}
+                    >{row.value}</div>
+                </div>
+            )
+        }, {
+            Header: 'Feedback Per 30',
+            accessor: 'feedback_per_30d'
+        }, {
+            Header: 'Cancel Rate 7',
+            accessor: 'cancel_rate_7d'
+        }, {
+            Header: 'Refund Rate 7',
+            accessor: 'refund_rate_7d'
+        }, {
+            Header: 'Feedback 365',
+            accessor: 'feedback_1y'
+        }, {
+            Header: 'Rating 365',
+            accessor: 'rating_1y',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value}%`,
+                            height: '100%',
+                            backgroundColor: row.value > 95 ? '#85cc00'
+                                : row.value < 90 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out'
+                        }}
+                    >{row.value}</div>
+                </div>
+            )
+        }];
         return (
             <div className="App">
-                <form ref="searchForm">
-                    <input type="text" ref="account"
-                           placeholder="account"
-                           onChange={this.handleChange.bind(this)}
-                    />
-                    <button onClick={this.search}>Search</button>
-                </form>
                 <ReactTable
                     data={this.state.data}
                     columns={columns}
                     pages={this.state.pages}
+                    defaultPageSize={100}
+                    style={{
+                        height: "800px" // This will force the table body to overflow and scroll, since there is not enough room
+                    }}
+                    filterable
                     className="-striped -highlight"
+                    showPaginationTop
+                    showPaginationBottom
                 />
             </div>
         )
