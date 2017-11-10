@@ -11,6 +11,7 @@ class AccountLog extends React.Component {
             data: rawData,
             account: '',
             country: '',
+            account_name: '',
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -26,25 +27,35 @@ class AccountLog extends React.Component {
 
     }
     componentDidMount () {
-        api.fetchAccountLogs(this.state.account, this.state.country)
+        api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name)
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
     }
+    componentWillUpdate () {
+
+    }
     search() {
         console.log('this.state', this.state);
-        const BASE_URL = 'http://localhost:3002/api/v1/account_logs?access_token=b41127cf658eeb348ebc5a9513826bb0'
+        const BASE_URL = 'http://a9test.ibport.com/api/v1/account_logs?access_token=b41127cf658eeb348ebc5a9513826bb0'
         const FETCH_URL = `${BASE_URL}&account=${this.state.account}&log_date=${this.state.log_date}`;
         console.log('FETCH_URL', FETCH_URL);
     }
     handleChange(e) {
-        this.setState({account: e.target.value})
-        console.log(this.state.account)
+        this.setState({account_name: e.target.value}, () => {
+            api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name)
+                .then(function (res) {
+                    this.setState({data: res});
+                }.bind(this));
+        })
     }
     render() {
         const columns = [{
             Header: 'Account Name',
-            accessor: 'account_name'
+            accessor: 'account_name',
+            Cell: row => (
+                <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
+            )
         }, {
             Header: 'Country',
             accessor: 'country'
@@ -55,18 +66,14 @@ class AccountLog extends React.Component {
             Header: 'Status',
             accessor: 'status',
             Cell: row => (
-                    <div
+                    <span
                         style={{
-                            width: `${row.value}%`,
-                            height: '100%',
-                            backgroundColor: row.value === "AA" ? '#85cc00'
+                            color: row.value === "AA" ? '#85cc00'
                                 : row.value === "AI" ? '#ffbf00'
                                     : row.value === "Login Blocked" ? '#dadada'
                                     : '#ff2e00',
-                            borderRadius: '2px',
-                            transition: 'all .2s ease-out'
                         }}
-                    >{row.value}</div>
+                    >{row.value}</span>
             )
         }, {
             Header: 'ODR',
@@ -95,10 +102,54 @@ class AccountLog extends React.Component {
             )
         }, {
             Header: 'Orders 7',
-            accessor: 'order_7d'
+            accessor: 'order_7d',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value/50}%`,
+                            height: '100%',
+                            backgroundColor: row.value > 1000 ? '#85cc00'
+                                : row.value < 500 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out'
+                        }}
+                    >{row.value}</div>
+                </div>
+            )
         }, {
             Header: 'Orders 30',
-            accessor: 'order_30d'
+            accessor: 'order_30d',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value/100}%`,
+                            height: '100%',
+                            backgroundColor: row.value > 1000 ? '#85cc00'
+                                : row.value < 500 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out'
+                        }}
+                    >{row.value}</div>
+                </div>
+            )
         }, {
             Header: 'Feedback 30',
             accessor: 'feedback_30d'
@@ -167,6 +218,7 @@ class AccountLog extends React.Component {
         }];
         return (
             <div className="App">
+                <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
                 <ReactTable
                     data={this.state.data}
                     columns={columns}
@@ -180,6 +232,7 @@ class AccountLog extends React.Component {
                     showPaginationTop
                     showPaginationBottom
                 />
+                <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
             </div>
         )
     }
@@ -187,7 +240,7 @@ class AccountLog extends React.Component {
 class App extends Component {
   render() {
     return (
-            <AccountLog/>
+        <AccountLog/>
     );
   }
 }

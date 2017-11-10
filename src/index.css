@@ -3,3 +3,7 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+.all-account-link {
+  width: 100%;
+  background-color: lightskyblue;
+}
