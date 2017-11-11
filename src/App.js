@@ -58,7 +58,9 @@ class AccountLog extends React.Component {
             )
         }, {
             Header: 'Country',
-            accessor: 'country'
+            accessor: 'country',
+            filterMethod: (filter, row) =>
+                row[filter.id].toLowerCase().startsWith(filter.value)
         }, {
             Header: 'Date',
             accessor: 'log_date'
@@ -74,7 +76,8 @@ class AccountLog extends React.Component {
                                     : '#ff2e00',
                         }}
                     >{row.value}</span>
-            )
+            ), filterMethod: (filter, row) =>
+            row[filter.id].toLowerCase().startsWith(filter.value)
         }, {
             Header: 'ODR',
             accessor: 'odr_short',
@@ -99,7 +102,39 @@ class AccountLog extends React.Component {
                         }}
                     >{row.value}</div>
                 </div>
-            )
+            ),
+            filterMethod: (filter, row) => {
+                var filtervalue = filter.value;
+                var begin = 0.0;
+                var end = 0.0;
+                var rowvalue = row[filter.id];
+                if (filtervalue == '') {
+                    return true;
+                }
+                if (filtervalue.indexOf('-') > 0) {
+                    begin = parseFloat(filtervalue.split('-')[0], 10);
+                    end = parseFloat(filtervalue.split('-')[1], 10);
+                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                } else if (filtervalue.indexOf('>') > -1) {
+                    begin = parseFloat(filtervalue.split('>')[1], 10);
+                    return parseFloat(rowvalue) > begin;
+                } else if (filtervalue.indexOf('<') > -1) {
+                    end = parseFloat(filtervalue.split('<')[1], 10);
+                    return parseFloat(rowvalue) < end;
+                }
+            },
+            Filter: ({ filter, onChange }) =>
+                <input
+                    onChange={event => {
+                            if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                                onChange(event.target.value)
+                            }
+                        }
+                    }
+                    style={{ width: "100%" }}
+                    placeholder={"e.g. <1 1-2 >3"}
+                />
+
         }, {
             Header: 'Orders 7',
             accessor: 'order_7d',
@@ -124,7 +159,38 @@ class AccountLog extends React.Component {
                         }}
                     >{row.value}</div>
                 </div>
-            )
+            ),
+            filterMethod: (filter, row) => {
+                var filtervalue = filter.value;
+                var begin = 0.0;
+                var end = 0.0;
+                var rowvalue = row[filter.id];
+                if (filtervalue == '') {
+                    return true;
+                }
+                if (filtervalue.indexOf('-') > 0) {
+                    begin = parseFloat(filtervalue.split('-')[0], 10);
+                    end = parseFloat(filtervalue.split('-')[1], 10);
+                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                } else if (filtervalue.indexOf('>') > -1) {
+                    begin = parseFloat(filtervalue.split('>')[1], 10);
+                    return parseFloat(rowvalue) > begin;
+                } else if (filtervalue.indexOf('<') > -1) {
+                    end = parseFloat(filtervalue.split('<')[1], 10);
+                    return parseFloat(rowvalue) < end;
+                }
+            },
+            Filter: ({ filter, onChange }) =>
+                <input
+                    onChange={event => {
+                        if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                            onChange(event.target.value)
+                        }
+                    }
+                    }
+                    style={{ width: "100%" }}
+                    placeholder={"e.g. <1 1-2 >3"}
+                />
         }, {
             Header: 'Orders 30',
             accessor: 'order_30d',
@@ -149,10 +215,72 @@ class AccountLog extends React.Component {
                         }}
                     >{row.value}</div>
                 </div>
-            )
+            ),
+            filterMethod: (filter, row) => {
+                var filtervalue = filter.value;
+                var begin = 0.0;
+                var end = 0.0;
+                var rowvalue = row[filter.id];
+                if (filtervalue == '') {
+                    return true;
+                }
+                if (filtervalue.indexOf('-') > 0) {
+                    begin = parseFloat(filtervalue.split('-')[0], 10);
+                    end = parseFloat(filtervalue.split('-')[1], 10);
+                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                } else if (filtervalue.indexOf('>') > -1) {
+                    begin = parseFloat(filtervalue.split('>')[1], 10);
+                    return parseFloat(rowvalue) > begin;
+                } else if (filtervalue.indexOf('<') > -1) {
+                    end = parseFloat(filtervalue.split('<')[1], 10);
+                    return parseFloat(rowvalue) < end;
+                }
+            },
+            Filter: ({ filter, onChange }) =>
+                <input
+                    onChange={event => {
+                        if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                            onChange(event.target.value)
+                        }
+                    }
+                    }
+                    style={{ width: "100%" }}
+                    placeholder={"e.g. <1 1-2 >3"}
+                />
         }, {
             Header: 'Feedback 30',
-            accessor: 'feedback_30d'
+            accessor: 'feedback_30d',
+            filterMethod: (filter, row) => {
+                var filtervalue = filter.value;
+                var begin = 0.0;
+                var end = 0.0;
+                var rowvalue = row[filter.id];
+                if (filtervalue == '') {
+                    return true;
+                }
+                if (filtervalue.indexOf('-') > 0) {
+                    begin = parseFloat(filtervalue.split('-')[0], 10);
+                    end = parseFloat(filtervalue.split('-')[1], 10);
+                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                } else if (filtervalue.indexOf('>') > -1) {
+                    begin = parseFloat(filtervalue.split('>')[1], 10);
+                    return parseFloat(rowvalue) > begin;
+                } else if (filtervalue.indexOf('<') > -1) {
+                    end = parseFloat(filtervalue.split('<')[1], 10);
+                    return parseFloat(rowvalue) < end;
+                }
+            },
+            Filter: ({ filter, onChange }) =>
+                <input
+                    onChange={event => {
+                        if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                            onChange(event.target.value)
+                        }
+                    }
+                    }
+                    style={{ width: "100%" }}
+                    placeholder={"e.g. <1 1-2 >3"}
+                />
         }, {
             Header: 'Rating 30',
             accessor: 'rating_30d',
@@ -177,7 +305,38 @@ class AccountLog extends React.Component {
                         }}
                     >{row.value}</div>
                 </div>
-            )
+            ),
+            filterMethod: (filter, row) => {
+                var filtervalue = filter.value;
+                var begin = 0.0;
+                var end = 0.0;
+                var rowvalue = row[filter.id];
+                if (filtervalue == '') {
+                    return true;
+                }
+                if (filtervalue.indexOf('-') > 0) {
+                    begin = parseFloat(filtervalue.split('-')[0], 10);
+                    end = parseFloat(filtervalue.split('-')[1], 10);
+                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                } else if (filtervalue.indexOf('>') > -1) {
+                    begin = parseFloat(filtervalue.split('>')[1], 10);
+                    return parseFloat(rowvalue) > begin;
+                } else if (filtervalue.indexOf('<') > -1) {
+                    end = parseFloat(filtervalue.split('<')[1], 10);
+                    return parseFloat(rowvalue) < end;
+                }
+            },
+            Filter: ({ filter, onChange }) =>
+                <input
+                    onChange={event => {
+                        if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                            onChange(event.target.value)
+                        }
+                    }
+                    }
+                    style={{ width: "100%" }}
+                    placeholder={"e.g. <1 1-2 >3"}
+                />
         }, {
             Header: 'Feedback Per 30',
             accessor: 'feedback_per_30d'
@@ -214,11 +373,43 @@ class AccountLog extends React.Component {
                         }}
                     >{row.value}</div>
                 </div>
-            )
+            ),
+            filterMethod: (filter, row) => {
+                var filtervalue = filter.value;
+                var begin = 0.0;
+                var end = 0.0;
+                var rowvalue = row[filter.id];
+                if (filtervalue == '') {
+                    return true;
+                }
+                if (filtervalue.indexOf('-') > 0) {
+                    begin = parseFloat(filtervalue.split('-')[0], 10);
+                    end = parseFloat(filtervalue.split('-')[1], 10);
+                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                } else if (filtervalue.indexOf('>') > -1) {
+                    begin = parseFloat(filtervalue.split('>')[1], 10);
+                    return parseFloat(rowvalue) > begin;
+                } else if (filtervalue.indexOf('<') > -1) {
+                    end = parseFloat(filtervalue.split('<')[1], 10);
+                    return parseFloat(rowvalue) < end;
+                }
+            },
+            Filter: ({ filter, onChange }) =>
+                <input
+                    onChange={event => {
+                        if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                            onChange(event.target.value)
+                        }
+                    }
+                    }
+                    style={{ width: "100%" }}
+                    placeholder={"e.g. <1 1-2 >3"}
+                />
         }];
         return (
             <div className="App">
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
+                <h3>Hold Shift when sorting to multi-sort</h3>
                 <ReactTable
                     data={this.state.data}
                     columns={columns}
