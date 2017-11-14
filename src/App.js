@@ -60,7 +60,7 @@ class AccountLog extends React.Component {
             Header: 'Country',
             accessor: 'country',
             filterMethod: (filter, row) =>
-                row[filter.id].toLowerCase().startsWith(filter.value)
+                row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
         }, {
             Header: 'Date',
             accessor: 'log_date'
@@ -70,14 +70,14 @@ class AccountLog extends React.Component {
             Cell: row => (
                     <span
                         style={{
-                            color: row.value === "AA" ? '#85cc00'
-                                : row.value === "AI" ? '#ffbf00'
+                            color: ["AA", "AI"].includes(row.value)? '#85cc00'
+                                : ["UA", "UI"].includes(row.value)? '#ffbf00'
                                     : row.value === "Login Blocked" ? '#dadada'
                                     : '#ff2e00',
                         }}
                     >{row.value}</span>
             ), filterMethod: (filter, row) =>
-            row[filter.id].toLowerCase().startsWith(filter.value)
+            row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
         }, {
             Header: 'ODR',
             accessor: 'odr_short',
@@ -92,13 +92,14 @@ class AccountLog extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value*20}%`,
+                            width: `${row.value*100}%`,
                             height: '100%',
                             backgroundColor: row.value < 0.5 ? '#85cc00'
                                 : row.value > 1 ? '#ff2e00'
                                     : '#ffbf00',
                             borderRadius: '2px',
-                            transition: 'all .2s ease-out'
+                            transition: 'all .2s ease-out',
+                            maxWidth: '100%'
                         }}
                     >{row.value}</div>
                 </div>
@@ -108,7 +109,7 @@ class AccountLog extends React.Component {
                 var begin = 0.0;
                 var end = 0.0;
                 var rowvalue = row[filter.id];
-                if (filtervalue == '') {
+                if (filtervalue === '') {
                     return true;
                 }
                 if (filtervalue.indexOf('-') > 0) {
@@ -165,7 +166,7 @@ class AccountLog extends React.Component {
                 var begin = 0.0;
                 var end = 0.0;
                 var rowvalue = row[filter.id];
-                if (filtervalue == '') {
+                if (filtervalue === '') {
                     return true;
                 }
                 if (filtervalue.indexOf('-') > 0) {
@@ -221,7 +222,7 @@ class AccountLog extends React.Component {
                 var begin = 0.0;
                 var end = 0.0;
                 var rowvalue = row[filter.id];
-                if (filtervalue == '') {
+                if (filtervalue === '') {
                     return true;
                 }
                 if (filtervalue.indexOf('-') > 0) {
@@ -255,7 +256,7 @@ class AccountLog extends React.Component {
                 var begin = 0.0;
                 var end = 0.0;
                 var rowvalue = row[filter.id];
-                if (filtervalue == '') {
+                if (filtervalue === '') {
                     return true;
                 }
                 if (filtervalue.indexOf('-') > 0) {
@@ -311,7 +312,7 @@ class AccountLog extends React.Component {
                 var begin = 0.0;
                 var end = 0.0;
                 var rowvalue = row[filter.id];
-                if (filtervalue == '') {
+                if (filtervalue === '') {
                     return true;
                 }
                 if (filtervalue.indexOf('-') > 0) {
@@ -350,61 +351,61 @@ class AccountLog extends React.Component {
             Header: 'Feedback 365',
             accessor: 'feedback_1y'
         }, {
-            Header: 'Rating 365',
-            accessor: 'rating_1y',
-            Cell: row => (
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: '#dadada',
-                        borderRadius: '2px'
-                    }}
-                >
+                Header: 'Rating 365',
+                accessor: 'rating_1y',
+                Cell: row => (
                     <div
                         style={{
-                            width: `${row.value}%`,
+                            width: '100%',
                             height: '100%',
-                            backgroundColor: row.value > 95 ? '#85cc00'
-                                : row.value < 90 ? '#ff2e00'
-                                    : '#ffbf00',
-                            borderRadius: '2px',
-                            transition: 'all .2s ease-out'
+                            backgroundColor: '#dadada',
+                            borderRadius: '2px'
                         }}
-                    >{row.value}</div>
-                </div>
-            ),
-            filterMethod: (filter, row) => {
-                var filtervalue = filter.value;
-                var begin = 0.0;
-                var end = 0.0;
-                var rowvalue = row[filter.id];
-                if (filtervalue == '') {
-                    return true;
-                }
-                if (filtervalue.indexOf('-') > 0) {
-                    begin = parseFloat(filtervalue.split('-')[0], 10);
-                    end = parseFloat(filtervalue.split('-')[1], 10);
-                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
-                } else if (filtervalue.indexOf('>') > -1) {
-                    begin = parseFloat(filtervalue.split('>')[1], 10);
-                    return parseFloat(rowvalue) > begin;
-                } else if (filtervalue.indexOf('<') > -1) {
-                    end = parseFloat(filtervalue.split('<')[1], 10);
-                    return parseFloat(rowvalue) < end;
-                }
-            },
-            Filter: ({ filter, onChange }) =>
-                <input
-                    onChange={event => {
-                        if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
-                            onChange(event.target.value)
+                    >
+                        <div
+                            style={{
+                                width: `${row.value}%`,
+                                height: '100%',
+                                backgroundColor: row.value > 95 ? '#85cc00'
+                                    : row.value < 90 ? '#ff2e00'
+                                        : '#ffbf00',
+                                borderRadius: '2px',
+                                transition: 'all .2s ease-out'
+                            }}
+                        >{row.value}</div>
+                    </div>
+                ),
+                filterMethod: (filter, row) => {
+                    var filtervalue = filter.value;
+                    var begin = 0.0;
+                    var end = 0.0;
+                    var rowvalue = row[filter.id];
+                    if (filtervalue === '') {
+                        return true;
+                    }
+                    if (filtervalue.indexOf('-') > 0) {
+                        begin = parseFloat(filtervalue.split('-')[0], 10);
+                        end = parseFloat(filtervalue.split('-')[1], 10);
+                        return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                    } else if (filtervalue.indexOf('>') > -1) {
+                        begin = parseFloat(filtervalue.split('>')[1], 10);
+                        return parseFloat(rowvalue) > begin;
+                    } else if (filtervalue.indexOf('<') > -1) {
+                        end = parseFloat(filtervalue.split('<')[1], 10);
+                        return parseFloat(rowvalue) < end;
+                    }
+                },
+                Filter: ({filter, onChange}) =>
+                    <input
+                        onChange={event => {
+                            if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                                onChange(event.target.value)
+                            }
                         }
-                    }
-                    }
-                    style={{ width: "100%" }}
-                    placeholder={"e.g. <1 1-2 >3"}
-                />
+                        }
+                        style={{width: "100%"}}
+                        placeholder={"e.g. <1 1-2 >3"}
+                    />
         }];
         return (
             <div className="App">
