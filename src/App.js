@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import AccountLog from "./components/AccountLog";
-import AccountHistory from "./components/AccountHistory";
+import Statistic from "./components/Statistic";
 import Diagram from "./components/Diagram";
 class App extends Component {
   render() {
@@ -13,13 +13,14 @@ class App extends Component {
                     <ul className="navbar">
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/diagram">Diagram</Link></li>
-                        <li><Link to="/accounthistory">AccountHistory</Link></li>
+                        <li><Link to="/statistic">Statistic</Link></li>
                     </ul>
 
                     <hr/>
 
                     <Route exact path="/" component={AccountLog}/>
                     <Route path="/diagram" component={Diagram}/>
+                    <Route path="/statistic" component={Statistic}/>
                     <Route path="/accounthistory/:account" render={() => <h1>diagram</h1>}/>
                 </div>
             </Router>

@@ -63,6 +63,16 @@ export default class AccountLog extends React.Component {
             filterMethod: (filter, row) =>
                 row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
         }, {
+            Header: 'Business',
+            accessor: 'business',
+            filterMethod: (filter, row) =>
+                row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
+        }, {
+            Header: 'Belonging',
+            accessor: 'belonging',
+            filterMethod: (filter, row) =>
+                row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
+        }, {
             Header: 'Date',
             accessor: 'log_date'
         }, {
