@@ -5,6 +5,8 @@ import AccountLog from "./components/AccountLog";
 import Statistic from "./components/Statistic";
 import Diagram from "./components/Diagram";
 import Summary from "./components/Summary";
+import Role from "./components/Role";
+
 class App extends Component {
   render() {
     return (
@@ -13,6 +15,7 @@ class App extends Component {
                 <div>
                     <ul className="navbar">
                         <li><Link to="/">Home</Link></li>
+                        <li><Link to="/role">Role</Link></li>
                         <li><Link to="/diagram">Diagram</Link></li>
                         <li><Link to="/statistic">Statistic</Link></li>
                         <li><Link to="/summary">Summary</Link></li>
@@ -21,10 +24,10 @@ class App extends Component {
                     <hr/>
 
                     <Route exact path="/" component={AccountLog}/>
+                    <Route path="/role" component={Role}/>
                     <Route path="/diagram" component={Diagram}/>
                     <Route path="/statistic" component={Statistic}/>
                     <Route path="/summary" component={Summary}/>
-                    <Route path="/accounthistory/:account" render={() => <h1>diagram</h1>}/>
                 </div>
             </Router>
         </div>

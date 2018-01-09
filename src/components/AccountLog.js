@@ -13,6 +13,8 @@ export default class AccountLog extends React.Component {
             account: '',
             country: '',
             account_name: '',
+            business: 'DS',
+            belonging: '',
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -28,7 +30,7 @@ export default class AccountLog extends React.Component {
 
     }
     componentDidMount () {
-        api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name)
+        api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
@@ -44,7 +46,7 @@ export default class AccountLog extends React.Component {
     }
     handleChange(e) {
         this.setState({account_name: e.target.value}, () => {
-            api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name)
+            api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
                 .then(function (res) {
                     this.setState({data: res});
                 }.bind(this));
@@ -60,11 +62,6 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Country',
             accessor: 'country',
-            filterMethod: (filter, row) =>
-                row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
-        }, {
-            Header: 'Business',
-            accessor: 'business',
             filterMethod: (filter, row) =>
                 row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
         }, {
