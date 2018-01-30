@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import ReactModal from 'react-modal';
 var api = require('../../utils/api.js');
 
 const rawData = [];
@@ -25,9 +26,23 @@ export default class AccountLog extends React.Component {
                 id: 'status',
                 value: 'AA'
             }],
-            loading: true
+            loading: true,
+            showModal: false
         };
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
 
+    }
+    handleOpenModal () {
+        api.fetchAccountDetail(this.state.account_name)
+            .then(function (res) {
+                console.log(res)
+            }.bind(this));
+        this.setState({ showModal: true });
+    }
+
+    handleCloseModal () {
+        this.setState({ showModal: false });
     }
     componentDidMount () {
         api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
@@ -431,7 +446,33 @@ export default class AccountLog extends React.Component {
                     className="-striped -highlight"
                     showPaginationTop
                     showPaginationBottom
+                    getTdProps={(state, rowInfo, column, instance) => {
+                        return {
+                            onMouseEnter: e => {
+                                if (rowInfo) {
+                                    this.state.account_name=rowInfo["original"]["account_name"]
+                                    this.handleOpenModal(rowInfo["original"]["account_name"])
+                                }
+                            }
+                        };
+                    }}
                 />
+                <ReactModal
+                    isOpen={this.state.showModal}
+                    contentLabel={this.state.account_name}
+                    ariaHideApp={false}
+                    style={{
+                        overlay: {
+                            backgroundColor: 'papayawhip'
+                        },
+                        content: {
+                            color: 'lightsteelblue'
+                        }
+                    }}
+                >
+                    <p>Modal text!</p>
+                    <button onClick={this.handleCloseModal}>Close Modal</button>
+                </ReactModal>
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
             </div>
         )
