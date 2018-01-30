@@ -6,6 +6,7 @@ import Statistic from "./components/Statistic";
 import Diagram from "./components/Diagram";
 import Summary from "./components/Summary";
 import Role from "./components/Role";
+import WorkReport from "./components/WorkReport";
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
                 <div>
                     <ul className="navbar">
                         <li><Link to="/">Home</Link></li>
+                        <li><Link to="/workreport">Work Report</Link></li>
                         <li><Link to="/role">Role</Link></li>
                         <li><Link to="/diagram">Diagram</Link></li>
                         <li><Link to="/statistic">Statistic</Link></li>
@@ -24,6 +26,7 @@ class App extends Component {
                     <hr/>
 
                     <Route exact path="/" component={AccountLog}/>
+                    <Route path="/workreport" component={WorkReport}/>
                     <Route path="/role" component={Role}/>
                     <Route path="/diagram" component={Diagram}/>
                     <Route path="/statistic" component={Statistic}/>
