@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import '../App.css';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import ReactModal from 'react-modal';
+import ReactTooltip from 'react-tooltip';
+import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
 
 const rawData = [];
@@ -29,20 +30,7 @@ export default class AccountLog extends React.Component {
             loading: true,
             showModal: false
         };
-        this.handleOpenModal = this.handleOpenModal.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
 
-    }
-    handleOpenModal () {
-        api.fetchAccountDetail(this.state.account_name)
-            .then(function (res) {
-                console.log(res)
-            }.bind(this));
-        this.setState({ showModal: true });
-    }
-
-    handleCloseModal () {
-        this.setState({ showModal: false });
     }
     componentDidMount () {
         api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
@@ -173,13 +161,14 @@ export default class AccountLog extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value/50}%`,
+                            width: `${row.value/15}%`,
                             height: '100%',
                             backgroundColor: row.value > 1000 ? '#85cc00'
                                 : row.value < 500 ? '#ff2e00'
                                     : '#ffbf00',
                             borderRadius: '2px',
-                            transition: 'all .2s ease-out'
+                            transition: 'all .2s ease-out',
+                            maxWidth: '100%'
                         }}
                     >{row.value}</div>
                 </div>
@@ -229,13 +218,14 @@ export default class AccountLog extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value/100}%`,
+                            width: `${row.value/50}%`,
                             height: '100%',
                             backgroundColor: row.value > 1000 ? '#85cc00'
                                 : row.value < 500 ? '#ff2e00'
                                     : '#ffbf00',
                             borderRadius: '2px',
-                            transition: 'all .2s ease-out'
+                            transition: 'all .2s ease-out',
+                            maxWidth: '100%'
                         }}
                     >{row.value}</div>
                 </div>
@@ -434,6 +424,17 @@ export default class AccountLog extends React.Component {
             <div >
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
                 <h3>Hold Shift when sorting to multi-sort</h3>
+                <a data-tip data-for='global'> σ`∀´)σ </a>
+                <a data-tip data-for='global'> (〃∀〃) </a>
+                <ReactTooltip id='global' aria-haspopup='true' role='example'>
+                    <p>This is a global react component tooltip</p>
+                    <p>You can put every thing here</p>
+                    <ul>
+                        <li>Word</li>
+                        <li>Chart</li>
+                        <li>Else</li>
+                    </ul>
+                </ReactTooltip>
                 <ReactTable
                     data={this.state.data}
                     columns={columns}
@@ -450,29 +451,14 @@ export default class AccountLog extends React.Component {
                         return {
                             onMouseEnter: e => {
                                 if (rowInfo) {
+                                    ReactTooltip.show(this.refs.global)
                                     this.state.account_name=rowInfo["original"]["account_name"]
-                                    this.handleOpenModal(rowInfo["original"]["account_name"])
+                                    console.log(this.state.account_name)
                                 }
                             }
                         };
                     }}
                 />
-                <ReactModal
-                    isOpen={this.state.showModal}
-                    contentLabel={this.state.account_name}
-                    ariaHideApp={false}
-                    style={{
-                        overlay: {
-                            backgroundColor: 'papayawhip'
-                        },
-                        content: {
-                            color: 'lightsteelblue'
-                        }
-                    }}
-                >
-                    <p>Modal text!</p>
-                    <button onClick={this.handleCloseModal}>Close Modal</button>
-                </ReactModal>
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
             </div>
         )

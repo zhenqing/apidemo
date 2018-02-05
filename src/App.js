@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import AccountLog from "./components/AccountLog";
+import Fund from "./components/Fund";
 import Statistic from "./components/Statistic";
 import Diagram from "./components/Diagram";
 import Summary from "./components/Summary";
@@ -16,6 +17,7 @@ class App extends Component {
                 <div>
                     <ul className="navbar">
                         <li><Link to="/">Home</Link></li>
+                        <li><Link to="/fund">Fund</Link></li>
                         <li><Link to="/workreport">Work Report</Link></li>
                         <li><Link to="/role">Role</Link></li>
                         <li><Link to="/diagram">Diagram</Link></li>
@@ -26,6 +28,7 @@ class App extends Component {
                     <hr/>
 
                     <Route exact path="/" component={AccountLog}/>
+                    <Route exact path="/fund" component={Fund}/>
                     <Route path="/workreport" component={WorkReport}/>
                     <Route path="/role" component={Role}/>
                     <Route path="/diagram" component={Diagram}/>
