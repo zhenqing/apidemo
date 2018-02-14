@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {findDOMNode} from 'react-dom';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Fund from "./Fund";
 var api = require('../../utils/api.js');
 import _ from 'lodash';
@@ -16,23 +15,24 @@ export default class FundList extends React.Component {
 
     render() {
         return (
-            <Tabs>
-                <TabList>
-                    <Tab>SF</Tab>
-                    <Tab>DV</Tab>
-                    <Tab>RS</Tab>
-                </TabList>
-
-                <TabPanel>
-                    <Fund belonging="SF"/>
-                </TabPanel>
-                <TabPanel>
-                    <Fund  belonging="DV"/>
-                </TabPanel>
-                <TabPanel>
-                    <Fund  belonging="RS"/>
-                </TabPanel>
-            </Tabs>
+            <table>
+                <tr>
+                    <th>SF</th>
+                    <th>DV</th>
+                    <th>RS</th>
+                </tr>
+                <tr>
+                    <td>
+                        <Fund belonging="SF"/>
+                    </td>
+                    <td>
+                        <Fund belonging="DV"/>
+                    </td>
+                    <td>
+                        <Fund belonging="RS"/>
+                    </td>
+                </tr>
+            </table>
         )
     }
 }
