@@ -4,11 +4,12 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
+import {LineChart, XAxis, Tooltip, CartesianGrid, Line} from 'recharts';
 var api = require('../../utils/api.js');
-import {PieChart, XAxis, Tooltip, CartesianGrid, Pie} from 'recharts';
+import _ from 'lodash';
 
 const rawData = [];
-export default class Fund extends React.Component {
+export default class FundTimeline extends React.Component {
     constructor(props) {
         super();
         var today = new Date();
@@ -18,11 +19,7 @@ export default class Fund extends React.Component {
         var nextweek = oneWeekLater.getFullYear() + '-' + (oneWeekLater.getMonth() + 1) + '-' + oneWeekLater.getDate();
         this.state = {
             data: rawData,
-            account: '',
-            country: '',
-            account_name: '',
-            business: 'DS',
-            belonging: props.belonging,
+            account_name: '100US',
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -34,14 +31,12 @@ export default class Fund extends React.Component {
                 value: 'AA'
             }],
             loading: true,
-            showModal: false,
-            date: date,
-            nextweek: nextweek
+            showModal: false
         };
 
     }
     componentDidMount () {
-        api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
+        api.fetchFund(this.state.account_name)
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
@@ -51,7 +46,7 @@ export default class Fund extends React.Component {
     }
     handleChange(e) {
         this.setState({account_name: e.target.value}, () => {
-            api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
+            api.fetchFunds(this.state.account)
                 .then(function (res) {
                     this.setState({data: res});
                 }.bind(this));
@@ -248,6 +243,18 @@ export default class Fund extends React.Component {
                         <li>Else</li>
                     </ul>
                 </ReactTooltip>
+                <LineChart
+                    width={1200}
+                    height={400}
+                    data={this.state.data}
+                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                >
+                    <XAxis dataKey="log_date" />
+                    <Tooltip />
+                    <CartesianGrid stroke="#f5f5f5" />
+                    <Line type="monotone" dataKey="payment_amount" stroke="#ff7300" yAxisId={0} />
+                    <Line type="monotone" dataKey="unavailable_balance" stroke="#387908" yAxisId={1} />
+                </LineChart>
                 <ReactTable
                     data={this.state.data}
                     columns={columns}

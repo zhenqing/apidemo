@@ -5,10 +5,10 @@ import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
-import {PieChart, XAxis, Tooltip, CartesianGrid, Pie} from 'recharts';
+import _ from 'lodash';
 
 const rawData = [];
-export default class Fund extends React.Component {
+export default class FundPredict extends React.Component {
     constructor(props) {
         super();
         var today = new Date();

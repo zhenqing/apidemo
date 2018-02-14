@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import AccountLog from "./components/AccountLog";
 import FundList from "./components/FundList";
 import Fund from "./components/Fund";
+import FundTimeline from "./components/FundTimeline";
 import Statistic from "./components/Statistic";
 import Diagram from "./components/Diagram";
 import Summary from "./components/Summary";
@@ -21,6 +22,7 @@ class App extends Component {
                         <li><Link to="/">Home</Link></li>
                         <li><Link to="/fundlist">Funds</Link></li>
                         <li><Link to="/fund">Fund</Link></li>
+                        <li><Link to="/fundtimeline">Fund Timeline</Link></li>
                         <li><Link to="/workreport">Work Report</Link></li>
                         <li><Link to="/role">Role</Link></li>
                         <li><Link to="/diagram">Diagram</Link></li>
@@ -33,6 +35,7 @@ class App extends Component {
                     <Route exact path="/" component={AccountLog}/>
                     <Route path="/fundlist" component={FundList}/>
                     <Route path="/fund" component={Fund}/>
+                    <Route path="/fundtimeline" component={FundTimeline}/>
                     <Route path="/workreport" component={WorkReport}/>
                     <Route path="/role" component={Role}/>
                     <Route path="/diagram" component={Diagram}/>

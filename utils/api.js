@@ -9,7 +9,14 @@ module.exports = {
             });
     },
     fetchFunds: function(account, country, account_name, business, belonging) {
-        var encodeURI = window.encodeURI('http://localhost:3002/api/v1/account_logs/fund?country=' + country + '&account=' + account + '&account_name=' + account_name + '&business=' + business+ '&log_date=2018-02-01' + '&belonging=' + belonging +'&access_token=b41127cf658eeb348ebc5a9513826bb0')
+        var encodeURI = window.encodeURI('http://localhost:3002/api/v1/account_logs/fund?country=' + country + '&account_name=' + account + '&business=' + business+ '&log_date=2018-02-01' + '&belonging=' + belonging +'&access_token=b41127cf658eeb348ebc5a9513826bb0')
+        return axios.get(encodeURI)
+            .then(function (response) {
+                return response.data;
+            });
+    },
+    fetchFund: function(account_name) {
+        var encodeURI = window.encodeURI('http://localhost:3002/api/v1/account_logs/fund?account_name=' + account_name +'&access_token=b41127cf658eeb348ebc5a9513826bb0')
         return axios.get(encodeURI)
             .then(function (response) {
                 return response.data;

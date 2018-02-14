@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {findDOMNode} from 'react-dom';
-import Fund from "./Fund";
+import FundInfo from "./FundInfo";
 var api = require('../../utils/api.js');
 import _ from 'lodash';
 
@@ -16,22 +16,26 @@ export default class FundList extends React.Component {
     render() {
         return (
             <table>
-                <tr>
-                    <th>SF</th>
-                    <th>DV</th>
-                    <th>RS</th>
-                </tr>
-                <tr>
-                    <td>
-                        <Fund belonging="SF"/>
-                    </td>
-                    <td>
-                        <Fund belonging="DV"/>
-                    </td>
-                    <td>
-                        <Fund belonging="RS"/>
-                    </td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>SF</th>
+                        <th>DV</th>
+                        <th>RS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <FundInfo belonging="SF"/>
+                        </td>
+                        <td>
+                            <FundInfo belonging="DV"/>
+                        </td>
+                        <td>
+                            <FundInfo belonging="RS"/>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         )
     }
