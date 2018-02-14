@@ -5,11 +5,11 @@ import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
-import _ from 'lodash'
+import _ from 'lodash';
 
 const rawData = [];
 export default class Fund extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
         var today = new Date();
         var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -22,7 +22,7 @@ export default class Fund extends React.Component {
             country: '',
             account_name: '',
             business: 'DS',
-            belonging: '',
+            belonging: props.belonging,
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -64,16 +64,6 @@ export default class Fund extends React.Component {
             Cell: row => (
                 <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
             )
-        }, {
-            Header: 'Belonging',
-            accessor: 'belonging',
-            filterMethod: (filter, row) =>
-                row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
-        }, {
-            Header: 'Business',
-            accessor: 'business',
-            filterMethod: (filter, row) =>
-                row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
         }, {
             Header: 'Date',
             accessor: 'log_date'
