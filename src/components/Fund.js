@@ -94,11 +94,6 @@ export default class Fund extends React.Component {
         }, {
             Header: 'Payment Amount',
             accessor: 'payment_amount',
-            aggregate: (values, rows) => _.sum(values),
-            Aggregated: row => {
-                // You can even render the cell differently if it's an aggregated cell
-                return <span>{Math.floor(row.value)} (sum)</span>
-            },
             Cell: row => (
                 <div
                     style={{
@@ -193,11 +188,6 @@ export default class Fund extends React.Component {
         }, {
             Header: 'Unavailable Balance',
             accessor: 'unavailable_balance',
-            aggregate: (values, rows) => _.sum(values),
-            Aggregated: row => {
-                // You can even render the cell differently if it's an aggregated cell
-                return <span>{Math.floor(row.value)} (sum)</span>
-            },
             Cell: row => (
                 <div
                     style={{
@@ -280,7 +270,6 @@ export default class Fund extends React.Component {
                     className="-striped -highlight"
                     showPaginationTop
                     showPaginationBottom
-                    pivotBy={['belonging', 'business', 'payment_date']}
                     getTdProps={(state, rowInfo, column, instance) => {
                         return {
                             onMouseEnter: e => {

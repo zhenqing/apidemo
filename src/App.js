@@ -28,7 +28,7 @@ class App extends Component {
                     <hr/>
 
                     <Route exact path="/" component={AccountLog}/>
-                    <Route exact path="/fund" component={Fund}/>
+                    <Route path="/fund" component={Fund}/>
                     <Route path="/workreport" component={WorkReport}/>
                     <Route path="/role" component={Role}/>
                     <Route path="/diagram" component={Diagram}/>
