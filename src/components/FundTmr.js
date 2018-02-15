@@ -21,7 +21,7 @@ export default class FundTmr extends React.Component {
             account: '',
             country: '',
             account_name: '',
-            business: 'DS',
+            business: '',
             belonging: props.belonging,
             page: 1,
             pageSize: 10,
@@ -64,9 +64,6 @@ export default class FundTmr extends React.Component {
             Cell: row => (
                 <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
             )
-        }, {
-            Header: 'Date',
-            accessor: 'log_date'
         }, {
             Header: 'Status',
             accessor: 'status',
@@ -235,19 +232,6 @@ export default class FundTmr extends React.Component {
         }];
         return (
             <div >
-                <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
-                <h3>Hold Shift when sorting to multi-sort</h3>
-                <a data-tip data-for='global'> σ`∀´)σ </a>
-                <a data-tip data-for='global'> (〃∀〃) </a>
-                <ReactTooltip id='global' aria-haspopup='true' role='example'>
-                    <p>This is a global react component tooltip</p>
-                    <p>You can put every thing here</p>
-                    <ul>
-                        <li>Word</li>
-                        <li>Chart</li>
-                        <li>Else</li>
-                    </ul>
-                </ReactTooltip>
                 <ReactTable
                     data={this.state.data}
                     columns={columns}
@@ -272,7 +256,6 @@ export default class FundTmr extends React.Component {
                         };
                     }}
                 />
-                <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
             </div>
         )
     }

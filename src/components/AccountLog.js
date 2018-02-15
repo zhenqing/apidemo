@@ -8,14 +8,14 @@ var api = require('../../utils/api.js');
 
 const rawData = [];
 export default class AccountLog extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
         this.state = {
             data: rawData,
             account: '',
             country: '',
             account_name: '',
-            business: 'DS',
+            business: props.business,
             belonging: '',
             page: 1,
             pageSize: 10,

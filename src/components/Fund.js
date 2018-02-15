@@ -5,7 +5,6 @@ import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
-import {PieChart, XAxis, Tooltip, CartesianGrid, Pie} from 'recharts';
 
 const rawData = [];
 export default class Fund extends React.Component {
@@ -21,7 +20,7 @@ export default class Fund extends React.Component {
             account: '',
             country: '',
             account_name: '',
-            business: 'DS',
+            business: '',
             belonging: props.belonging,
             page: 1,
             pageSize: 10,
@@ -64,9 +63,6 @@ export default class Fund extends React.Component {
             Cell: row => (
                 <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
             )
-        }, {
-            Header: 'Date',
-            accessor: 'log_date'
         }, {
             Header: 'Status',
             accessor: 'status',
@@ -153,27 +149,7 @@ export default class Fund extends React.Component {
                 return a.length > b.length ? 1 : -1;
             },
             Cell: row => (
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: '#dadada',
-                        borderRadius: '2px'
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `100%`,
-                            height: '100%',
-                            backgroundColor: row.value === this.state.date ? '#85cc00'
-                                : row.value < this.state.nextweek ? '#ffbf00'
-                                    : '#ff2e00',
-                            borderRadius: '2px',
-                            transition: 'all .2s ease-out',
-                            maxWidth: '100%'
-                        }}
-                    >{row.value}</div>
-                </div>
+                <div>{row.value}</div>
             )
         }, {
             Header: 'Unavailable Balance',
@@ -236,18 +212,6 @@ export default class Fund extends React.Component {
         return (
             <div >
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
-                <h3>Hold Shift when sorting to multi-sort</h3>
-                <a data-tip data-for='global'> σ`∀´)σ </a>
-                <a data-tip data-for='global'> (〃∀〃) </a>
-                <ReactTooltip id='global' aria-haspopup='true' role='example'>
-                    <p>This is a global react component tooltip</p>
-                    <p>You can put every thing here</p>
-                    <ul>
-                        <li>Word</li>
-                        <li>Chart</li>
-                        <li>Else</li>
-                    </ul>
-                </ReactTooltip>
                 <ReactTable
                     data={this.state.data}
                     columns={columns}

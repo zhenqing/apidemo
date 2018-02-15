@@ -181,16 +181,16 @@ export default class FundTimeline extends React.Component {
                         <Line type="monotone" dataKey="unavailable_balance" stroke="#387908" yAxisId={1} />
                     </LineChart>
                 </ResponsiveContainer>
-                <ReactTable
-                    data={this.state.data}
-                    columns={columns}
-                    defaultPageSize={100}
-                    style={{
-                        height: "800px" // This will force the table body to overflow and scroll, since there is not enough room
-                    }}
-                    filterable
-                    className="-striped -highlight"
-                />
+                    <ReactTable
+                        data={this.state.data}
+                        columns={columns}
+                        defaultPageSize={100}
+                        style={{
+                            height: "800px" // This will force the table body to overflow and scroll, since there is not enough room
+                        }}
+                        filterable
+                        className="-striped -highlight"
+                    />
             </div>
         )
     }
