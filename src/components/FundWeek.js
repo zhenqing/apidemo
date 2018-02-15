@@ -18,11 +18,11 @@ export default class FundWeek extends React.Component {
         var nextweek = oneWeekLater.getFullYear() + '-' + (oneWeekLater.getMonth() + 1) + '-' + oneWeekLater.getDate();
         this.state = {
             data: rawData,
-            account: '',
-            country: '',
-            account_name: '',
-            business: '',
-            belonging: props.belonging,
+            account: props.account || '',
+            country: props.country || '',
+            account_name: props.account_name || '',
+            business: props.business || '',
+            belonging: props.belonging || '',
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table

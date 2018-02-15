@@ -18,6 +18,8 @@ export default class AccountSummary extends React.Component {
                 <TabList>
                     <Tab>DS</Tab>
                     <Tab>PL</Tab>
+                    <Tab>INTL</Tab>
+                    <Tab>TM</Tab>
                 </TabList>
 
                 <TabPanel>
@@ -25,6 +27,12 @@ export default class AccountSummary extends React.Component {
                 </TabPanel>
                 <TabPanel>
                     <AccountLog business="PL"/>
+                </TabPanel>
+                <TabPanel>
+                    <AccountLog belonging="INTL"/>
+                </TabPanel>
+                <TabPanel>
+                    <AccountLog belonging="TM"/>
                 </TabPanel>
             </Tabs>
         )

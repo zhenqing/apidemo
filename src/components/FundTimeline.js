@@ -12,7 +12,11 @@ export default class FundTimeline extends React.Component {
         super();
         this.state = {
             data: rawData,
-            belonging: props.belonging,
+            account: props.account || '',
+            country: props.country || '',
+            account_name: props.account_name || '',
+            business: props.business || '',
+            belonging: props.belonging || '',
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table

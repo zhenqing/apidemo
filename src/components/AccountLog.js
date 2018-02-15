@@ -12,11 +12,11 @@ export default class AccountLog extends React.Component {
         super();
         this.state = {
             data: rawData,
-            account: '',
-            country: '',
-            account_name: '',
-            business: props.business,
-            belonging: '',
+            account: props.account || '',
+            country: props.country || '',
+            account_name: props.account_name || '',
+            business: props.business || '',
+            belonging: props.belonging || '',
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -70,6 +70,11 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Belonging',
             accessor: 'belonging',
+            filterMethod: (filter, row) =>
+                row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
+        }, {
+            Header: 'Business',
+            accessor: 'business',
             filterMethod: (filter, row) =>
                 row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
         }, {
