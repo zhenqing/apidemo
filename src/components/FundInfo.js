@@ -3,9 +3,8 @@ import {findDOMNode} from 'react-dom';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Fund from "./Fund";
 import FundTimeline from "./FundTimeline";
-import FundPredict from "./FundPredict";
-var api = require('../../utils/api.js');
-import _ from 'lodash';
+import FundTmr from "./FundTmr";
+import FundWeek from "./FundWeek";
 
 const rawData = [];
 export default class FundInfo extends React.Component {
@@ -22,7 +21,8 @@ export default class FundInfo extends React.Component {
                 <TabList>
                     <Tab>Detail</Tab>
                     <Tab>Timeline</Tab>
-                    <Tab>Predict</Tab>
+                    <Tab>Tomorrow</Tab>
+                    <Tab>Next Week</Tab>
                 </TabList>
 
                 <TabPanel>
@@ -32,7 +32,10 @@ export default class FundInfo extends React.Component {
                     <FundTimeline belonging={this.props.belonging}/>
                 </TabPanel>
                 <TabPanel>
-                    <FundPredict  belonging={this.props.belonging}/>
+                    <FundTmr belonging={this.props.belonging}/>
+                </TabPanel>
+                <TabPanel>
+                    <FundWeek belonging={this.props.belonging}/>
                 </TabPanel>
             </Tabs>
         )

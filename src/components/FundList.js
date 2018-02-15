@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import {findDOMNode} from 'react-dom';
 import FundInfo from "./FundInfo";
-var api = require('../../utils/api.js');
-import _ from 'lodash';
 
 const rawData = [];
 export default class FundList extends React.Component {

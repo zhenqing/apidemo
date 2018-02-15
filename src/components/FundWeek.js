@@ -8,7 +8,7 @@ var api = require('../../utils/api.js');
 import _ from 'lodash';
 
 const rawData = [];
-export default class FundPredict extends React.Component {
+export default class FundWeek extends React.Component {
     constructor(props) {
         super();
         var today = new Date();
@@ -41,7 +41,7 @@ export default class FundPredict extends React.Component {
 
     }
     componentDidMount () {
-        api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
+        api.fetchFundsWeek(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
@@ -51,7 +51,7 @@ export default class FundPredict extends React.Component {
     }
     handleChange(e) {
         this.setState({account_name: e.target.value}, () => {
-            api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
+            api.fetchFundsWeek(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
                 .then(function (res) {
                     this.setState({data: res});
                 }.bind(this));
