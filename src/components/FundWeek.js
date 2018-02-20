@@ -59,14 +59,23 @@ export default class FundWeek extends React.Component {
     }
     render() {
         const columns = [{
-            Header: 'Account Name',
-            accessor: 'account_name',
+            Header: 'Belonging',
+            accessor: 'belonging',
+            maxWidth: 20,
             Cell: row => (
                 <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
             )
         }, {
+            Header: 'Acc',
+            accessor: 'account_name',
+            maxWidth: 65,
+            Cell: row => (
+                <div>{row.value}</div>
+            )
+        }, {
             Header: 'Status',
             accessor: 'status',
+            maxWidth: 60,
             Cell: row => (
                 <span
                     style={{
@@ -81,6 +90,10 @@ export default class FundWeek extends React.Component {
         }, {
             Header: 'Payment Amount',
             accessor: 'payment_amount',
+            aggregate: (values, rows) => _.sum(values),
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             Cell: row => (
                 <div
                     style={{
@@ -92,11 +105,9 @@ export default class FundWeek extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value/1000}%`,
+                            width: `${row.value/500}%`,
                             height: '100%',
-                            backgroundColor: row.value > 10000 ? '#85cc00'
-                                : row.value < 5000 ? '#ff2e00'
-                                    : '#ffbf00',
+                            backgroundColor: row.value > 0 ?'#85cc00' : '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
                             maxWidth: '100%'
@@ -139,15 +150,12 @@ export default class FundWeek extends React.Component {
         }, {
             Header: 'Payment Date',
             accessor: 'payment_date',
+            maxWidth: 90
+        }, {
+            Header: 'Unavailable Balance',
+            accessor: 'unavailable_balance',
             sortMethod: (a, b) => {
-                if (a.length === 0) {
-                    if (b.length === 0){
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                }
-                return a.length > b.length ? 1 : -1;
+                return a > b ? -1 : 1;
             },
             Cell: row => (
                 <div
@@ -160,37 +168,9 @@ export default class FundWeek extends React.Component {
                 >
                     <div
                         style={{
-                            width: `100%`,
+                            width: `${row.value/500}%`,
                             height: '100%',
-                            backgroundColor: row.value === this.state.date ? '#85cc00'
-                                : row.value < this.state.nextweek ? '#ffbf00'
-                                    : '#ff2e00',
-                            borderRadius: '2px',
-                            transition: 'all .2s ease-out',
-                            maxWidth: '100%'
-                        }}
-                    >{row.value}</div>
-                </div>
-            )
-        }, {
-            Header: 'Unavailable Balance',
-            accessor: 'unavailable_balance',
-            Cell: row => (
-                <div
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: '#dadada',
-                        borderRadius: '2px'
-                    }}
-                >
-                    <div
-                        style={{
-                            width: `${row.value/1000}%`,
-                            height: '100%',
-                            backgroundColor: row.value < 5000 ? '#85cc00'
-                                : row.value > 10000 ? '#ff2e00'
-                                    : '#ffbf00',
+                            backgroundColor: '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
                             maxWidth: '100%'
@@ -241,20 +221,14 @@ export default class FundWeek extends React.Component {
                         height: "800px" // This will force the table body to overflow and scroll, since there is not enough room
                     }}
                     filterable
+                    pivotBy={["belonging"]}
+                    collapseOnSortingChange={false}
+                    collapseOnPageChange={false}
+                    collapseOnDataChange={false}
+                    freezeWhenExpanded={true}
                     className="-striped -highlight"
                     showPaginationTop
                     showPaginationBottom
-                    getTdProps={(state, rowInfo, column, instance) => {
-                        return {
-                            onMouseEnter: e => {
-                                if (rowInfo) {
-                                    ReactTooltip.show(this.refs.global)
-                                    this.state.account_name=rowInfo["original"]["account_name"]
-                                    console.log(this.state.account_name)
-                                }
-                            }
-                        };
-                    }}
                 />
             </div>
         )

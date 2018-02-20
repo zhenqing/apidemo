@@ -5,6 +5,7 @@ import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
+import _ from 'lodash';
 
 const rawData = [];
 export default class Fund extends React.Component {
@@ -58,14 +59,23 @@ export default class Fund extends React.Component {
     }
     render() {
         const columns = [{
-            Header: 'Account Name',
+            Header: 'Belonging',
+            accessor: 'belonging',
+            maxWidth: 20,
+            Cell: row => (
+                <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
+            )
+        }, {
+            Header: 'Acc',
             accessor: 'account_name',
+            maxWidth: 65,
             Cell: row => (
                 <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
             )
         }, {
             Header: 'Status',
             accessor: 'status',
+            maxWidth: 60,
             Cell: row => (
                 <span
                     style={{
@@ -78,8 +88,12 @@ export default class Fund extends React.Component {
             ), filterMethod: (filter, row) =>
                 row[filter.id].toLowerCase().startsWith(filter.value.toLowerCase())
         }, {
-            Header: 'Payment Amount',
+            Header: 'Payment',
             accessor: 'payment_amount',
+            aggregate: (values, rows) => _.sum(values),
+            sortMethod: (a, b) => {
+            return a > b ? -1 : 1;
+        },
             Cell: row => (
                 <div
                     style={{
@@ -91,11 +105,9 @@ export default class Fund extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value/1000}%`,
+                            width: `${row.value/500}%`,
                             height: '100%',
-                            backgroundColor: row.value > 10000 ? '#85cc00'
-                                : row.value < 5000 ? '#ff2e00'
-                                    : '#ffbf00',
+                            backgroundColor: row.value > 0 ?'#85cc00' : '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
                             maxWidth: '100%'
@@ -138,22 +150,14 @@ export default class Fund extends React.Component {
         }, {
             Header: 'Payment Date',
             accessor: 'payment_date',
-            sortMethod: (a, b) => {
-                if (a.length === 0) {
-                    if (b.length === 0){
-                        return 0;
-                    } else {
-                        return -1;
-                    }
-                }
-                return a.length > b.length ? 1 : -1;
-            },
-            Cell: row => (
-                <div>{row.value}</div>
-            )
+            maxWidth: 90
         }, {
-            Header: 'Unavailable Balance',
+            Header: 'Unavailable',
             accessor: 'unavailable_balance',
+            aggregate: (values, rows) => _.sum(values),
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             Cell: row => (
                 <div
                     style={{
@@ -165,11 +169,9 @@ export default class Fund extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value/1000}%`,
+                            width: `${row.value/500}%`,
                             height: '100%',
-                            backgroundColor: row.value < 5000 ? '#85cc00'
-                                : row.value > 10000 ? '#ff2e00'
-                                    : '#ffbf00',
+                            backgroundColor: '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
                             maxWidth: '100%'
@@ -221,20 +223,14 @@ export default class Fund extends React.Component {
                         height: "800px" // This will force the table body to overflow and scroll, since there is not enough room
                     }}
                     filterable
+                    pivotBy={["belonging"]}
+                    collapseOnSortingChange={false}
+                    collapseOnPageChange={false}
+                    collapseOnDataChange={false}
+                    freezeWhenExpanded={true}
                     className="-striped -highlight"
                     showPaginationTop
                     showPaginationBottom
-                    getTdProps={(state, rowInfo, column, instance) => {
-                        return {
-                            onMouseEnter: e => {
-                                if (rowInfo) {
-                                    ReactTooltip.show(this.refs.global)
-                                    this.state.account_name=rowInfo["original"]["account_name"]
-                                    console.log(this.state.account_name)
-                                }
-                            }
-                        };
-                    }}
                 />
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
             </div>

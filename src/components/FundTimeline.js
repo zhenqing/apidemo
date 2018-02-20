@@ -3,7 +3,7 @@ import '../App.css';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import {findDOMNode} from 'react-dom';
-import {LineChart, XAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer} from 'recharts';
+import {LineChart, XAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
 var api = require('../../utils/api.js');
 
 const rawData = [];
@@ -51,6 +51,12 @@ export default class FundTimeline extends React.Component {
     }
     render() {
         const columns = [{
+            Header: 'Account Name',
+            accessor: 'account_name',
+            Cell: row => (
+                <div>{row.value}</div>
+            )
+        }, {
                 Header: 'Date',
                 accessor: 'log_date'
             }, {
@@ -179,10 +185,11 @@ export default class FundTimeline extends React.Component {
                         margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                     >
                         <XAxis dataKey="log_date" />
+                        <Legend verticalAlign="top" height={36}/>
                         <Tooltip />
                         <CartesianGrid stroke="#f5f5f5" />
-                        <Line type="monotone" dataKey="payment_amount" stroke="#ff7300" yAxisId={0} />
-                        <Line type="monotone" dataKey="unavailable_balance" stroke="#387908" yAxisId={1} />
+                        <Line type="monotone" dataKey="payment_amount" stroke="#387908" yAxisId={0} />
+                        <Line type="monotone" dataKey="unavailable_balance" stroke="#ff7300" yAxisId={1} />
                     </LineChart>
                 </ResponsiveContainer>
                     <ReactTable

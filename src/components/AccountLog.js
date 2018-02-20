@@ -4,6 +4,8 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
+import {LineChart, XAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
+import {Grid, Row, Col} from "react-bootstrap";
 var api = require('../../utils/api.js');
 
 const rawData = [];
@@ -97,6 +99,9 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'ODR',
             accessor: 'odr_short',
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             Cell: row => (
                 <div
                     style={{
@@ -155,6 +160,9 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Orders 7',
             accessor: 'order_7d',
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             Cell: row => (
                 <div
                     style={{
@@ -212,6 +220,9 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Orders 30',
             accessor: 'order_30d',
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             Cell: row => (
                 <div
                     style={{
@@ -269,6 +280,9 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Feedback 30',
             accessor: 'feedback_30d',
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             filterMethod: (filter, row) => {
                 var filtervalue = filter.value;
                 var begin = 0.0;
@@ -303,6 +317,9 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Rating 30',
             accessor: 'rating_30d',
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             Cell: row => (
                 <div
                     style={{
@@ -314,7 +331,7 @@ export default class AccountLog extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value}%`,
+                            width: `${(row.value-80)*5}%`,
                             height: '100%',
                             backgroundColor: row.value > 95 ? '#85cc00'
                                 : row.value < 90 ? '#ff2e00'
@@ -367,10 +384,16 @@ export default class AccountLog extends React.Component {
             accessor: 'refund_rate_7d'
         }, {
             Header: 'Feedback 365',
-            accessor: 'feedback_1y'
+            accessor: 'feedback_1y',
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
         }, {
             Header: 'Rating 365',
             accessor: 'rating_1y',
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
             Cell: row => (
                 <div
                     style={{
@@ -382,7 +405,7 @@ export default class AccountLog extends React.Component {
                 >
                     <div
                         style={{
-                            width: `${row.value}%`,
+                            width: `${(row.value-80)*5}%`,
                             height: '100%',
                             backgroundColor: row.value > 95 ? '#85cc00'
                                 : row.value < 90 ? '#ff2e00'
@@ -440,6 +463,63 @@ export default class AccountLog extends React.Component {
                         <li>Else</li>
                     </ul>
                 </ReactTooltip>
+                {this.state.account_name !=='' ? (
+                    <Row className="show-grid">
+                        <Col xs={6} md={3}>
+                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
+                                <LineChart
+                                    width={600}
+                                    height={200}
+                                    data={this.state.data}
+                                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                                >
+                                    <XAxis dataKey="log_date" />
+                                    <Tooltip />
+                                    <Legend verticalAlign="top" height={36}/>
+                                    <CartesianGrid stroke="#f5f5f5" />
+                                    <Line type="monotone" dataKey="order_7d" stroke="#387908" yAxisId={0} />
+                                    <Line type="monotone" dataKey="order_30d" stroke="#9CBBF0" yAxisId={1} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </Col>
+                        <Col xs={6} md={3}>
+                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
+                                <LineChart
+                                    width={600}
+                                    height={200}
+                                    data={this.state.data}
+                                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                                >
+                                    <XAxis dataKey="log_date" />
+                                    <Tooltip />
+                                    <Legend verticalAlign="top" height={36}/>
+                                    <CartesianGrid stroke="#f5f5f5" />
+                                    <Line type="monotone" dataKey="feedback_30d" stroke="#958D58" yAxisId={1} />
+                                    <Line type="monotone" dataKey="odr_short" stroke="#ff7300" yAxisId={2} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </Col>
+                        <Col xs={6} md={3}>
+                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
+                                <LineChart
+                                    width={600}
+                                    height={200}
+                                    data={this.state.data}
+                                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                                >
+                                    <XAxis dataKey="log_date" />
+                                    <Tooltip />
+                                    <Legend verticalAlign="top" height={36}/>
+                                    <CartesianGrid stroke="#f5f5f5" />
+                                    <Line type="monotone" dataKey="rating_30d" stroke="#958D58" yAxisId={1} />
+                                    <Line type="monotone" dataKey="rating_1y" stroke="#ff7300" yAxisId={2} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </Col>
+                    </Row>
+                ) : (
+                    <div></div>
+                )}
                 <ReactTable
                     data={this.state.data}
                     columns={columns}
