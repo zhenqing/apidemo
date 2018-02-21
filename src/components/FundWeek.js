@@ -6,6 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
 import _ from 'lodash';
+import {FormattedDate} from 'react-intl';
 
 const rawData = [];
 export default class FundWeek extends React.Component {
@@ -69,6 +70,11 @@ export default class FundWeek extends React.Component {
             Header: 'Acc',
             accessor: 'account_name',
             maxWidth: 65,
+            Aggregated: row => {
+                return (
+                    <span>Total</span>
+                );
+            },
             Cell: row => (
                 <div>{row.value}</div>
             )
@@ -76,6 +82,11 @@ export default class FundWeek extends React.Component {
             Header: 'Status',
             accessor: 'status',
             maxWidth: 60,
+            Aggregated: row => {
+                return (
+                    <span></span>
+                );
+            },
             Cell: row => (
                 <span
                     style={{
@@ -110,7 +121,8 @@ export default class FundWeek extends React.Component {
                             backgroundColor: row.value > 0 ?'#85cc00' : '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{Math.floor(row.value)}</div>
                 </div>
@@ -150,10 +162,22 @@ export default class FundWeek extends React.Component {
         }, {
             Header: 'Payment Date',
             accessor: 'payment_date',
-            maxWidth: 90
+            Aggregated: row => {
+                return (
+                    <span></span>
+                );
+            },
+            Cell: row => (
+                <FormattedDate
+                    value={row.value}
+                    day="numeric"
+                    month="numeric" />
+            ),
+            maxWidth: 40
         }, {
             Header: 'Unavailable Balance',
             accessor: 'unavailable_balance',
+            aggregate: (values, rows) => _.sum(values),
             sortMethod: (a, b) => {
                 return a > b ? -1 : 1;
             },
@@ -173,7 +197,8 @@ export default class FundWeek extends React.Component {
                             backgroundColor: '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{Math.floor(row.value)}</div>
                 </div>
@@ -227,8 +252,6 @@ export default class FundWeek extends React.Component {
                     collapseOnDataChange={false}
                     freezeWhenExpanded={true}
                     className="-striped -highlight"
-                    showPaginationTop
-                    showPaginationBottom
                 />
             </div>
         )

@@ -6,6 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
 import _ from 'lodash';
+import {FormattedDate} from 'react-intl';
 
 const rawData = [];
 export default class Fund extends React.Component {
@@ -68,6 +69,11 @@ export default class Fund extends React.Component {
         }, {
             Header: 'Acc',
             accessor: 'account_name',
+            Aggregated: row => {
+                return (
+                    <span>Total</span>
+                );
+            },
             maxWidth: 65,
             Cell: row => (
                 <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
@@ -75,6 +81,11 @@ export default class Fund extends React.Component {
         }, {
             Header: 'Status',
             accessor: 'status',
+            Aggregated: row => {
+                return (
+                    <span></span>
+                );
+            },
             maxWidth: 60,
             Cell: row => (
                 <span
@@ -110,7 +121,8 @@ export default class Fund extends React.Component {
                             backgroundColor: row.value > 0 ?'#85cc00' : '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{Math.floor(row.value)}</div>
                 </div>
@@ -148,9 +160,20 @@ export default class Fund extends React.Component {
                 />
 
         }, {
-            Header: 'Payment Date',
+            Header: 'Date',
             accessor: 'payment_date',
-            maxWidth: 90
+            Aggregated: row => {
+                return (
+                    <span></span>
+                );
+            },
+            Cell: row => (
+                <FormattedDate
+                    value={row.value}
+                    day="numeric"
+                    month="numeric" />
+            ),
+            maxWidth: 40
         }, {
             Header: 'Unavailable',
             accessor: 'unavailable_balance',
@@ -229,7 +252,6 @@ export default class Fund extends React.Component {
                     collapseOnDataChange={false}
                     freezeWhenExpanded={true}
                     className="-striped -highlight"
-                    showPaginationTop
                     showPaginationBottom
                 />
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>

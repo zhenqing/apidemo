@@ -15,21 +15,21 @@ export default class FundList extends React.Component {
     render() {
         return (
         <div>
-            <Row className="show-grid">
+            <Row>
                 <Col xs={6} md={3}>
-                    <h2>SF</h2>
+                    <h4>SF</h4>
                 </Col>
                 <Col xs={6} md={3}>
-                    <h2>DV</h2>
+                    <h4>DV</h4>
                 </Col>
                 <Col xs={6} md={3}>
-                    <h2>RS</h2>
+                    <h4>RS</h4>
                 </Col>
                 <Col xs={6} md={3}>
-                    <h2>INTL</h2>
+                    <h4>INTL</h4>
                 </Col>
             </Row>
-            <Row className="show-grid">
+            <Row>
                 <Col xs={6} md={3}>
                     <FundInfo belonging="SF"/>
                 </Col>

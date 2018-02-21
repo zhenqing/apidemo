@@ -3,8 +3,9 @@ import '../App.css';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import {findDOMNode} from 'react-dom';
-import {LineChart, XAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
+import {LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
 var api = require('../../utils/api.js');
+import {FormattedDate} from 'react-intl';
 
 const rawData = [];
 export default class FundTimeline extends React.Component {
@@ -51,12 +52,6 @@ export default class FundTimeline extends React.Component {
     }
     render() {
         const columns = [{
-            Header: 'Account Name',
-            accessor: 'account_name',
-            Cell: row => (
-                <div>{row.value}</div>
-            )
-        }, {
                 Header: 'Date',
                 accessor: 'log_date'
             }, {
@@ -80,7 +75,8 @@ export default class FundTimeline extends React.Component {
                                     : '#ffbf00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{Math.floor(row.value)}</div>
                 </div>
@@ -138,7 +134,8 @@ export default class FundTimeline extends React.Component {
                                     : '#ffbf00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{Math.floor(row.value)}</div>
                 </div>

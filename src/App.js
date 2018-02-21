@@ -24,7 +24,6 @@ class App extends Component {
                             <NavItem href="/fundlist">Funds</NavItem>
                         </Nav>
                     </Navbar>
-                    <hr/>
 
                     <Route exact path="/" component={AccountSummary}/>
                     <Route path="/fundlist" component={FundList}/>

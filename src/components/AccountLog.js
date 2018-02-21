@@ -4,8 +4,8 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
-import {LineChart, XAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
-import {Grid, Row, Col} from "react-bootstrap";
+import {LineChart, XAxis,YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
+import {Row, Col} from "react-bootstrap";
 var api = require('../../utils/api.js');
 
 const rawData = [];
@@ -19,6 +19,7 @@ export default class AccountLog extends React.Component {
             account_name: props.account_name || '',
             business: props.business || '',
             belonging: props.belonging || '',
+            single: 0,
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -53,7 +54,7 @@ export default class AccountLog extends React.Component {
         this.setState({account_name: e.target.value}, () => {
             api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
                 .then(function (res) {
-                    this.setState({data: res});
+                    this.setState({data: res, single: this.state.account_name === "" ? 0 : 1});
                 }.bind(this));
         })
     }
@@ -120,7 +121,8 @@ export default class AccountLog extends React.Component {
                                     : '#ffbf00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{row.value}</div>
                 </div>
@@ -181,7 +183,8 @@ export default class AccountLog extends React.Component {
                                     : '#ffbf00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{row.value}</div>
                 </div>
@@ -241,7 +244,8 @@ export default class AccountLog extends React.Component {
                                     : '#ffbf00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{row.value}</div>
                 </div>
@@ -280,6 +284,30 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Feedback 30',
             accessor: 'feedback_30d',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value/5}%`,
+                            height: '100%',
+                            backgroundColor: row.value > 300 ? '#85cc00'
+                                : row.value < 50 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out',
+                            maxWidth: '100%',
+                            textAlign: 'Left'
+                        }}
+                    >{row.value}</div>
+                </div>
+            ),
             sortMethod: (a, b) => {
                 return a > b ? -1 : 1;
             },
@@ -337,7 +365,8 @@ export default class AccountLog extends React.Component {
                                 : row.value < 90 ? '#ff2e00'
                                     : '#ffbf00',
                             borderRadius: '2px',
-                            transition: 'all .2s ease-out'
+                            transition: 'all .2s ease-out',
+                            textAlign: 'Left'
                         }}
                     >{row.value}</div>
                 </div>
@@ -375,6 +404,30 @@ export default class AccountLog extends React.Component {
                 />
         }, {
             Header: 'Feedback Per 30',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value*20}%`,
+                            height: '100%',
+                            backgroundColor: row.value > 5 ? '#85cc00'
+                                : row.value < 3 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out',
+                            maxWidth: '100%',
+                            textAlign: 'Left'
+                        }}
+                    >{row.value}</div>
+                </div>
+            ),
             accessor: 'feedback_per_30d'
         }, {
             Header: 'Cancel Rate 7',
@@ -385,6 +438,30 @@ export default class AccountLog extends React.Component {
         }, {
             Header: 'Feedback 365',
             accessor: 'feedback_1y',
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value/20}%`,
+                            height: '100%',
+                            backgroundColor: row.value > 1000 ? '#85cc00'
+                                : row.value < 500 ? '#ff2e00'
+                                    : '#ffbf00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out',
+                            maxWidth: '100%',
+                            textAlign: 'Left'
+                        }}
+                    >{row.value}</div>
+                </div>
+            ),
             sortMethod: (a, b) => {
                 return a > b ? -1 : 1;
             },
@@ -411,7 +488,8 @@ export default class AccountLog extends React.Component {
                                 : row.value < 90 ? '#ff2e00'
                                     : '#ffbf00',
                             borderRadius: '2px',
-                            transition: 'all .2s ease-out'
+                            transition: 'all .2s ease-out',
+                            textAlign: 'Left'
                         }}
                     >{row.value}</div>
                 </div>
@@ -451,19 +529,7 @@ export default class AccountLog extends React.Component {
         return (
             <div >
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
-                <h3>Hold Shift when sorting to multi-sort</h3>
-                <a data-tip data-for='global'> σ`∀´)σ </a>
-                <a data-tip data-for='global'> (〃∀〃) </a>
-                <ReactTooltip id='global' aria-haspopup='true' role='example'>
-                    <p>This is a global react component tooltip</p>
-                    <p>You can put every thing here</p>
-                    <ul>
-                        <li>Word</li>
-                        <li>Chart</li>
-                        <li>Else</li>
-                    </ul>
-                </ReactTooltip>
-                {this.state.account_name !=='' ? (
+                {this.state.single === 1 ? (
                     <Row className="show-grid">
                         <Col xs={6} md={3}>
                             <ResponsiveContainer width='100%' aspect={3.0/1.0}>
@@ -494,8 +560,8 @@ export default class AccountLog extends React.Component {
                                     <Tooltip />
                                     <Legend verticalAlign="top" height={36}/>
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <Line type="monotone" dataKey="feedback_30d" stroke="#958D58" yAxisId={1} />
-                                    <Line type="monotone" dataKey="odr_short" stroke="#ff7300" yAxisId={2} />
+                                    <Line type="monotone" dataKey="feedback_30d" stroke="#387908" yAxisId={1} />
+                                    <Line type="monotone" dataKey="feedback_1y" stroke="#9CBBF0" yAxisId={2} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </Col>
@@ -511,8 +577,24 @@ export default class AccountLog extends React.Component {
                                     <Tooltip />
                                     <Legend verticalAlign="top" height={36}/>
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <Line type="monotone" dataKey="rating_30d" stroke="#958D58" yAxisId={1} />
-                                    <Line type="monotone" dataKey="rating_1y" stroke="#ff7300" yAxisId={2} />
+                                    <Line type="monotone" dataKey="rating_30d" stroke="#387908" yAxisId={1} />
+                                    <Line type="monotone" dataKey="rating_1y" stroke="#9CBBF0" yAxisId={2} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </Col>
+                        <Col xs={6} md={3}>
+                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
+                                <LineChart
+                                    width={600}
+                                    height={200}
+                                    data={this.state.data}
+                                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                                >
+                                    <XAxis dataKey="log_date" />
+                                    <Tooltip />
+                                    <Legend verticalAlign="top" height={36}/>
+                                    <CartesianGrid stroke="#f5f5f5" />
+                                    <Line type="monotone" dataKey="odr_short" stroke="#387908" yAxisId={1} />
                                 </LineChart>
                             </ResponsiveContainer>
                         </Col>
