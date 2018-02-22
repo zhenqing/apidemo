@@ -63,7 +63,7 @@ export default class FundTmr extends React.Component {
             accessor: 'belonging',
             maxWidth: 20,
             Cell: row => (
-                <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
+                <div></div>
             )
         }, {
             Header: 'Acc',

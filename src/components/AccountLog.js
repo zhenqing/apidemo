@@ -4,7 +4,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
-import {LineChart, XAxis,YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
+import {ReferenceLine, ComposedChart, LineChart, XAxis,YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
 import {Row, Col} from "react-bootstrap";
 var api = require('../../utils/api.js');
 
@@ -41,9 +41,7 @@ export default class AccountLog extends React.Component {
                 this.setState({data: res});
             }.bind(this));
     }
-    componentWillUpdate () {
 
-    }
     search() {
         console.log('this.state', this.state);
         const BASE_URL = 'http://a9test.ibport.com/api/v1/account_logs?access_token=b41127cf658eeb348ebc5a9513826bb0'
@@ -532,70 +530,77 @@ export default class AccountLog extends React.Component {
                 {this.state.single === 1 ? (
                     <Row className="show-grid">
                         <Col xs={6} md={3}>
-                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
-                                <LineChart
+                            <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                                <ComposedChart
                                     width={600}
-                                    height={200}
+                                    height={300}
                                     data={this.state.data}
                                     margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                                 >
-                                    <XAxis dataKey="log_date" />
-                                    <Tooltip />
+                                    <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                    <YAxis yAxisId="left" tick={{ transform: 'translate(0, 3)' }} tickCount={10} tickLine={true} axisLine={true} minTickGap={10} />
+                                    <YAxis yAxisId="right" orientation='right' tickCount={10} tickLine={true} axisLine={true} minTickGap={10}/>
+                                    <Tooltip/>
                                     <Legend verticalAlign="top" height={36}/>
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <Line type="monotone" dataKey="order_7d" stroke="#387908" yAxisId={0} />
-                                    <Line type="monotone" dataKey="order_30d" stroke="#9CBBF0" yAxisId={1} />
-                                </LineChart>
+                                    <Line type="monotone" dataKey="order_7d" stroke="#387908" yAxisId="left" />
+                                    <Line type="monotone" dataKey="order_30d" stroke="#9CBBF0" yAxisId="right" />
+                                </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
                         <Col xs={6} md={3}>
-                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
-                                <LineChart
+                            <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                                <ComposedChart
                                     width={600}
-                                    height={200}
+                                    height={300}
                                     data={this.state.data}
                                     margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                                 >
-                                    <XAxis dataKey="log_date" />
+                                    <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                    <YAxis yAxisId="left" tickCount={10} tickLine={true} axisLine={true} minTickGap={10} />
+                                    <YAxis yAxisId="right" orientation='right' tickCount={10} tickLine={true} axisLine={true} minTickGap={10}/>
                                     <Tooltip />
                                     <Legend verticalAlign="top" height={36}/>
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <Line type="monotone" dataKey="feedback_30d" stroke="#387908" yAxisId={1} />
-                                    <Line type="monotone" dataKey="feedback_1y" stroke="#9CBBF0" yAxisId={2} />
-                                </LineChart>
+                                    <Line type="monotone" dataKey="feedback_30d" stroke="#387908" yAxisId="left" />
+                                    <Line type="monotone" dataKey="feedback_1y" stroke="#9CBBF0" yAxisId="right" />
+                                </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
                         <Col xs={6} md={3}>
-                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
-                                <LineChart
+                            <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                                <ComposedChart
                                     width={600}
-                                    height={200}
+                                    height={300}
                                     data={this.state.data}
                                     margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                                 >
-                                    <XAxis dataKey="log_date" />
+                                    <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                    <YAxis yAxisId="left" tickCount={10} tickLine={true} axisLine={true} minTickGap={10} />
+                                    <YAxis yAxisId="right" orientation='right' tickCount={10} tickLine={true} axisLine={true} minTickGap={10}/>
                                     <Tooltip />
                                     <Legend verticalAlign="top" height={36}/>
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <Line type="monotone" dataKey="rating_30d" stroke="#387908" yAxisId={1} />
-                                    <Line type="monotone" dataKey="rating_1y" stroke="#9CBBF0" yAxisId={2} />
-                                </LineChart>
+                                    <Line type="monotone" dataKey="rating_30d" stroke="#387908" yAxisId="left" />
+                                    <Line type="monotone" dataKey="rating_1y" stroke="#9CBBF0" yAxisId="right" />
+                                </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
                         <Col xs={6} md={3}>
-                            <ResponsiveContainer width='100%' aspect={3.0/1.0}>
-                                <LineChart
+                            <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                                <ComposedChart
                                     width={600}
-                                    height={200}
+                                    height={300}
                                     data={this.state.data}
                                     margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                                 >
-                                    <XAxis dataKey="log_date" />
+                                    <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                    <YAxis yAxisId="left" tickCount={10} tickLine={true} axisLine={true} minTickGap={0.5} domain={[0.5, 1]}/>
                                     <Tooltip />
                                     <Legend verticalAlign="top" height={36}/>
                                     <CartesianGrid stroke="#f5f5f5" />
-                                    <Line type="monotone" dataKey="odr_short" stroke="#387908" yAxisId={1} />
-                                </LineChart>
+                                    <Line type="monotone" dataKey="odr_short" stroke="#387908" yAxisId="left" />
+                                </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
                     </Row>

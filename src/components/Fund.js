@@ -7,6 +7,7 @@ import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
 import _ from 'lodash';
 import {FormattedDate} from 'react-intl';
+import {Link} from 'react-router-dom';
 
 const rawData = [];
 export default class Fund extends React.Component {
@@ -47,14 +48,12 @@ export default class Fund extends React.Component {
                 this.setState({data: res});
             }.bind(this));
     }
-    componentWillUpdate () {
 
-    }
     handleChange(e) {
         this.setState({account_name: e.target.value}, () => {
             api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
                 .then(function (res) {
-                    this.setState({data: res});
+                    this.setState({data: res, single: this.state.account_name === "" ? 0 : 1});
                 }.bind(this));
         })
     }
@@ -64,7 +63,7 @@ export default class Fund extends React.Component {
             accessor: 'belonging',
             maxWidth: 20,
             Cell: row => (
-                <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
+                <span></span>
             )
         }, {
             Header: 'Acc',
@@ -74,10 +73,7 @@ export default class Fund extends React.Component {
                     <span>Total</span>
                 );
             },
-            maxWidth: 65,
-            Cell: row => (
-                <button onClick={this.handleChange.bind(this)} className="account-link" value={row.value}>{row.value}</button>
-            )
+            maxWidth: 65
         }, {
             Header: 'Status',
             accessor: 'status',
@@ -197,7 +193,8 @@ export default class Fund extends React.Component {
                             backgroundColor: '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            textAlign: 'Left'
                         }}
                     >{Math.floor(row.value)}</div>
                 </div>

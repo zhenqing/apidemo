@@ -3,9 +3,8 @@ import '../App.css';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import {findDOMNode} from 'react-dom';
-import {LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
+import {AreaChart, Area, ComposedChart, Bar, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
 var api = require('../../utils/api.js');
-import {FormattedDate} from 'react-intl';
 
 const rawData = [];
 export default class FundTimeline extends React.Component {
@@ -34,7 +33,7 @@ export default class FundTimeline extends React.Component {
 
     }
     componentDidMount () {
-        api.fetchFund(this.state.belonging)
+        api.fetchFund(this.state.belonging,this.state.account_name)
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
@@ -175,19 +174,20 @@ export default class FundTimeline extends React.Component {
         return (
             <div >
                 <ResponsiveContainer width='100%' aspect={2.0/1.0}>
-                    <LineChart
+                    <AreaChart
                         width={800}
                         height={400}
                         data={this.state.data}
                         margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
                     >
-                        <XAxis dataKey="log_date" />
+                        <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                        <YAxis/>
                         <Legend verticalAlign="top" height={36}/>
                         <Tooltip />
                         <CartesianGrid stroke="#f5f5f5" />
-                        <Line type="monotone" dataKey="payment_amount" stroke="#387908" yAxisId={0} />
-                        <Line type="monotone" dataKey="unavailable_balance" stroke="#ff7300" yAxisId={1} />
-                    </LineChart>
+                        <Area type="monotone" dataKey="payment_amount" stackId="1" stroke="#387908" fill="#387908" />
+                        <Area type="monotone" dataKey="unavailable_balance" stackId="1" stroke="#ff7300" fill="#ff7300"  />
+                    </AreaChart>
                 </ResponsiveContainer>
                     <ReactTable
                         data={this.state.data}
