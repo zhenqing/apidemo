@@ -166,12 +166,13 @@ export default class FundTmr extends React.Component {
                     <span></span>
                 );
             },
-            Cell: row => (
-                <FormattedDate
-                    value={row.value}
-                    day="numeric"
-                    month="numeric" />
-            ),
+            Cell: row =>
+                { return row.value && (
+                        <FormattedDate
+                            value={row.value}
+                            day="numeric"
+                            month="numeric" />
+                )},
             maxWidth: 40
         }, {
             Header: 'Unavailable Balance',
