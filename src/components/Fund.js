@@ -4,12 +4,20 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
+import FundTimeline from "./FundTimeline";
 var api = require('../../utils/api.js');
 import _ from 'lodash';
 import {FormattedDate} from 'react-intl';
 import {Link} from 'react-router-dom';
+import {OverlayTrigger, Popover} from "react-bootstrap";
+import ReactLoading from 'react-loading';
 
 const rawData = [];
+const popoverRight = (
+    <Popover id="popover-positioned-right" title="Popover right">
+        <FundTimeline account-name=""/>
+    </Popover>
+);
 export default class Fund extends React.Component {
     constructor(props) {
         super();
@@ -73,7 +81,12 @@ export default class Fund extends React.Component {
                     <span>Total</span>
                 );
             },
-            maxWidth: 65
+            maxWidth: 65,
+            Cell: row => (
+                <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverRight}>
+                    <span>{row.value}</span>
+                </OverlayTrigger>
+            )
         }, {
             Header: 'Status',
             accessor: 'status',
@@ -233,8 +246,11 @@ export default class Fund extends React.Component {
                     placeholder={"e.g. <1 1-2 >3"}
                 />
         }];
+        if(this.state.data.length === 0) {
+            return <ReactLoading type="bars" />
+        }
         return (
-            <div >
+            <div>
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
                 <ReactTable
                     data={this.state.data}
