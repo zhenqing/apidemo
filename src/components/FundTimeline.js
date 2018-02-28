@@ -14,7 +14,7 @@ export default class FundTimeline extends React.Component {
             data: rawData,
             account: props.account || '',
             country: props.country || '',
-            account_name: props.account_name || '',
+            account_name: props.account_name || props.match.params.accountName || '',
             business: props.business || '',
             belonging: props.belonging || '',
             page: 1,

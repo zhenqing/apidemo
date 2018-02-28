@@ -13,11 +13,6 @@ import {OverlayTrigger, Popover} from "react-bootstrap";
 import ReactLoading from 'react-loading';
 
 const rawData = [];
-const popoverRight = (
-    <Popover id="popover-positioned-right" title="Popover right">
-        <FundTimeline account-name=""/>
-    </Popover>
-);
 export default class Fund extends React.Component {
     constructor(props) {
         super();
@@ -83,9 +78,7 @@ export default class Fund extends React.Component {
             },
             maxWidth: 65,
             Cell: row => (
-                <OverlayTrigger trigger={['hover', 'focus']} placement="right" overlay={popoverRight}>
-                    <span>{row.value}</span>
-                </OverlayTrigger>
+                <Link to={"/fundtimeline/"+row.value} role="button">{row.value}</Link>
             )
         }, {
             Header: 'Status',
