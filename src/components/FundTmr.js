@@ -6,6 +6,7 @@ import {findDOMNode} from 'react-dom';
 var api = require('../../utils/api.js');
 import _ from 'lodash';
 import {FormattedDate} from 'react-intl';
+import {Link} from 'react-router-dom';
 
 const rawData = [];
 export default class FundTmr extends React.Component {
@@ -75,7 +76,7 @@ export default class FundTmr extends React.Component {
                 );
             },
             Cell: row => (
-                <div>{row.value}</div>
+                <Link to={"/fundtimeline/"+row.value} role="button">{row.value}</Link>
             )
         }, {
             Header: 'Status',
