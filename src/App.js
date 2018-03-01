@@ -27,7 +27,7 @@ class App extends Component {
 
                     <Route exact path="/" component={AccountSummary}/>
                     <Route path="/fundlist" component={FundList}/>
-                    <Route path="/fund" component={Fund}/>
+                    <Route path="/fund/:logDate?" component={Fund}/>
                     <Route path="/fundtimeline/:accountName?" component={FundTimeline}/>
                     <Route path="/workreport" component={WorkReport}/>
                     <Route path="/role" component={Role}/>

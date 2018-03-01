@@ -8,8 +8,8 @@ module.exports = {
                 return response.data;
             });
     },
-    fetchFunds: function(account, country, account_name, business, belonging) {
-        var encodeURI = window.encodeURI('https://a9test.ibport.com/api/v1/account_logs/fund?country=' + country + '&account_name=' + account_name + '&business=' + business + '&belonging=' + belonging +'&access_token=b41127cf658eeb348ebc5a9513826bb0')
+    fetchFunds: function(account, country, account_name, business, belonging, log_date) {
+        var encodeURI = window.encodeURI('https://a9test.ibport.com/api/v1/account_logs/fund?country=' + country + '&account_name=' + account_name + '&business=' + business + '&belonging=' + belonging + '&log_date=' + log_date +'&access_token=b41127cf658eeb348ebc5a9513826bb0')
         return axios.get(encodeURI)
             .then(function (response) {
                 return response.data;

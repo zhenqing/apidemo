@@ -4,7 +4,7 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
-import {ReferenceLine, ComposedChart, LineChart, XAxis,YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
+import {ReferenceLine, ComposedChart, LineChart, BarChart, Bar, XAxis,YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
 import {Row, Col} from "react-bootstrap";
 var api = require('../../utils/api.js');
 
@@ -528,8 +528,9 @@ export default class AccountLog extends React.Component {
             <div >
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
                 {this.state.single === 1 ? (
+                    <div>
                     <Row className="show-grid">
-                        <Col xs={6} md={3}>
+                        <Col xs={6} md={4}>
                             <ResponsiveContainer width='100%' aspect={2.0/1.0}>
                                 <ComposedChart
                                     width={600}
@@ -548,7 +549,7 @@ export default class AccountLog extends React.Component {
                                 </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
-                        <Col xs={6} md={3}>
+                        <Col xs={6} md={4}>
                             <ResponsiveContainer width='100%' aspect={2.0/1.0}>
                                 <ComposedChart
                                     width={600}
@@ -567,7 +568,7 @@ export default class AccountLog extends React.Component {
                                 </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
-                        <Col xs={6} md={3}>
+                        <Col xs={6} md={4}>
                             <ResponsiveContainer width='100%' aspect={2.0/1.0}>
                                 <ComposedChart
                                     width={600}
@@ -586,7 +587,9 @@ export default class AccountLog extends React.Component {
                                 </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
-                        <Col xs={6} md={3}>
+                    </Row>
+                    <Row className="show-grid">
+                        <Col xs={6} md={4}>
                             <ResponsiveContainer width='100%' aspect={2.0/1.0}>
                                 <ComposedChart
                                     width={600}
@@ -600,10 +603,28 @@ export default class AccountLog extends React.Component {
                                     <Legend verticalAlign="top" height={36}/>
                                     <CartesianGrid stroke="#f5f5f5" />
                                     <Line type="monotone" dataKey="odr_short" stroke="#387908" yAxisId="left" />
+                                    <Line type="monotone" dataKey="cancel_rate_7d" stroke="#feb2b4" yAxisId="left" />
+                                    <Line type="monotone" dataKey="refund_rate_7d" stroke="#8884d8" yAxisId="left" />
                                 </ComposedChart>
                             </ResponsiveContainer>
                         </Col>
+                        <Col xs={6} md={4}>
+                            <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                                <BarChart width={600} height={300} data={this.state.data}
+                                          margin={{top: 20, right: 30, left: 20, bottom: 5}}>
+                                    <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                    <YAxis/>
+                                    <CartesianGrid strokeDasharray="3 3"/>
+                                    <Tooltip/>
+                                    <Legend verticalAlign="top" height={36}/>
+                                    <Bar dataKey="payment_amount" stackId="a" fill="#8884d8" />
+                                    <Bar dataKey="unavailable_balance" stackId="a" fill="#feb2b4" />
+                                    <Bar dataKey="disburse" stackId="a" fill="#1C783A" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </Col>
                     </Row>
+                    </div>
                 ) : (
                     <div></div>
                 )}

@@ -6,6 +6,7 @@ import {findDOMNode} from 'react-dom';
 import {AreaChart, Area, ComposedChart, BarChart, Bar, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
 var api = require('../../utils/api.js');
 import { tooltipContent } from './Functions';
+import {Link} from 'react-router-dom';
 const rawData = [];
 export default class FundTimeline extends React.Component {
     constructor(props) {
@@ -52,7 +53,10 @@ export default class FundTimeline extends React.Component {
     render() {
         const columns = [{
                 Header: 'Date',
-                accessor: 'log_date'
+                accessor: 'log_date',
+                Cell: row => (
+                    <Link to={"/fund/"+row.value} role="button">{row.value}</Link>
+                )
             }, {
             Header: 'Payment Amount',
             accessor: 'payment_amount',

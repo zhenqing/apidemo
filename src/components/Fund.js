@@ -23,6 +23,7 @@ export default class Fund extends React.Component {
         var nextweek = oneWeekLater.getFullYear() + '-' + (oneWeekLater.getMonth() + 1) + '-' + oneWeekLater.getDate();
         this.state = {
             data: rawData,
+            log_date: props.match ? props.log_date || props.match.params.logDate || '' : props.log_date || '',
             account: props.account || '',
             country: props.country || '',
             account_name: props.account_name || '',
@@ -46,7 +47,7 @@ export default class Fund extends React.Component {
 
     }
     componentDidMount () {
-        api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
+        api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging, this.state.log_date)
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
@@ -54,7 +55,7 @@ export default class Fund extends React.Component {
 
     handleChange(e) {
         this.setState({account_name: e.target.value}, () => {
-            api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
+            api.fetchFunds(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging, this.state.log_date)
                 .then(function (res) {
                     this.setState({data: res, single: this.state.account_name === "" ? 0 : 1});
                 }.bind(this));
