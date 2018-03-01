@@ -9,3 +9,7 @@ export function parallelTab(WrapElement, tabs) {
                 </Col>
     );
 }
+
+export function tooltipContent (tooltipProps) {
+    return <div>items: {Math.floor(tooltipProps.payload)}</div>
+}

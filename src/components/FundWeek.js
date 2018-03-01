@@ -119,7 +119,7 @@ export default class FundWeek extends React.Component {
                         style={{
                             width: `${row.value/500}%`,
                             height: '100%',
-                            backgroundColor: row.value > 0 ?'#85cc00' : '#ff2e00',
+                            backgroundColor: row.value > 0 ?'#8884d8' : '#ff2e00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
                             maxWidth: '100%',
@@ -197,6 +197,66 @@ export default class FundWeek extends React.Component {
                             width: `${row.value/500}%`,
                             height: '100%',
                             backgroundColor: '#ff2e00',
+                            borderRadius: '2px',
+                            transition: 'all .2s ease-out',
+                            maxWidth: '100%',
+                            textAlign: 'Left'
+                        }}
+                    >{Math.floor(row.value)}</div>
+                </div>
+            ),
+            filterMethod: (filter, row) => {
+                var filtervalue = filter.value;
+                var begin = 0.0;
+                var end = 0.0;
+                var rowvalue = row[filter.id];
+                if (filtervalue === '') {
+                    return true;
+                }
+                if (filtervalue.indexOf('-') > 0) {
+                    begin = parseFloat(filtervalue.split('-')[0], 10);
+                    end = parseFloat(filtervalue.split('-')[1], 10);
+                    return parseFloat(rowvalue) >= begin && parseFloat(rowvalue) <= end;
+                } else if (filtervalue.indexOf('>') > -1) {
+                    begin = parseFloat(filtervalue.split('>')[1], 10);
+                    return parseFloat(rowvalue) > begin;
+                } else if (filtervalue.indexOf('<') > -1) {
+                    end = parseFloat(filtervalue.split('<')[1], 10);
+                    return parseFloat(rowvalue) < end;
+                }
+            },
+            Filter: ({ filter, onChange }) =>
+                <input
+                    onChange={event => {
+                        if (RegExp('^$|>[0-9]*\.?[0-9]+|<[0-9]*\.?[0-9]+|[0-9]*\.?[0-9]+-[0-9]*\.?[0-9]+').test(event.target.value)) {
+                            onChange(event.target.value)
+                        }
+                    }
+                    }
+                    style={{ width: "100%" }}
+                    placeholder={"e.g. <1 1-2 >3"}
+                />
+        }, {
+            Header: 'Disburse',
+            accessor: 'disburse_amount',
+            aggregate: (values, rows) => _.sum(values),
+            sortMethod: (a, b) => {
+                return a > b ? -1 : 1;
+            },
+            Cell: row => (
+                <div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#dadada',
+                        borderRadius: '2px'
+                    }}
+                >
+                    <div
+                        style={{
+                            width: `${row.value/500}%`,
+                            height: '100%',
+                            backgroundColor: '#85cc00',
                             borderRadius: '2px',
                             transition: 'all .2s ease-out',
                             maxWidth: '100%',
