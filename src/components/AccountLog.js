@@ -671,7 +671,7 @@ export default class AccountLog extends React.Component {
                                     <Legend verticalAlign="top" height={36}/>
                                     <Bar dataKey="payment_amount" stackId="a" fill="#8884d8" />
                                     <Bar dataKey="unavailable_balance" stackId="a" fill="#feb2b4" />
-                                    <Bar dataKey="disburse" stackId="a" fill="#1C783A" />
+                                    <Bar dataKey="disburse_amount" stackId="a" fill="#1C783A" />
                                 </BarChart>
                             </ResponsiveContainer>
                         </Col>
