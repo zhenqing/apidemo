@@ -7,12 +7,16 @@ import {AreaChart, Area, ComposedChart, BarChart, Bar, LineChart, XAxis, YAxis, 
 var api = require('../../utils/api.js');
 import { tooltipContent } from './Functions';
 import {Link} from 'react-router-dom';
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+import {Row, Col} from "react-bootstrap";
 const rawData = [];
 export default class FundTimeline extends React.Component {
     constructor(props) {
         super();
         this.state = {
             data: rawData,
+            accounts: rawData,
             account: props.account || '',
             country: props.country || '',
             account_name: props.match ? props.account_name || props.match.params.accountName || '' : props.account_name || '',
@@ -35,6 +39,19 @@ export default class FundTimeline extends React.Component {
     }
     componentDidMount () {
         api.fetchFund(this.state.belonging,this.state.account_name)
+            .then(function (res) {
+                this.setState({data: res});
+            }.bind(this));
+        api.fetchAccounts()
+            .then(function (res) {
+                this.setState({accounts: res});
+            }.bind(this));
+    }
+    updateAccountName(newAccountName) {
+        this.setState({
+            account_name: newAccountName.value
+        });
+        api.fetchFund(this.state.belonging,newAccountName.value)
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
@@ -176,7 +193,7 @@ export default class FundTimeline extends React.Component {
                 />
         }, {
             Header: 'Disburse',
-            accessor: 'disburse',
+            accessor: 'disburse_amount',
             Cell: row => (
                 <div
                     style={{
@@ -233,19 +250,57 @@ export default class FundTimeline extends React.Component {
         }];
         return (
             <div >
-                <ResponsiveContainer width='100%' aspect={2.0/1.0}>
-                    <BarChart width={600} height={300} data={this.state.data}
-                              margin={{top: 20, right: 30, left: 20, bottom: 5}}>
-                        <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
-                        <YAxis/>
-                        <CartesianGrid strokeDasharray="3 3"/>
-                        <Tooltip/>
-                        <Legend verticalAlign="top" height={36}/>
-                        <Bar dataKey="payment_amount" stackId="a" fill="#8884d8" />
-                        <Bar dataKey="unavailable_balance" stackId="a" fill="#feb2b4" />
-                        <Bar dataKey="disburse" stackId="a" fill="#1C783A" />
-                    </BarChart>
-                </ResponsiveContainer>
+                <h3>{this.state.account_name} Fund Timeline</h3>
+                <Row className="show-grid">
+                    <Col xs={6} md={2}>
+                        Select Account
+                    </Col>
+                    <Col xs={6} md={2}>
+                        <Select
+                            value={this.state.account_name}
+                            options={this.state.accounts}
+                            onChange={this.updateAccountName.bind(this)}>
+                        </Select>
+                    </Col>
+                    <Col xs={6} md={2}>
+                        <Link to={"/accountlog/"+this.state.account_name} role="button">Account Log</Link>
+                    </Col>
+                </Row>
+                <Row className="show-grid">
+                    <Col xs={6} md={6}>
+                        <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                            <ComposedChart
+                                width={600}
+                                height={300}
+                                data={this.state.data}
+                                margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                            >
+                                <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                <YAxis yAxisId="left" tickCount={10} tickLine={true} axisLine={true} minTickGap={0.5} domain={[0.5, 1]}/>
+                                <Tooltip />
+                                <Legend verticalAlign="top" height={36}/>
+                                <CartesianGrid stroke="#f5f5f5" />
+                                <Line type="monotone" dataKey="status" stroke="#387908" yAxisId="left" />
+                                <Line type="monotone" dataKey="statusnum" stroke="#8884d8" yAxisId="left" />
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </Col>
+                    <Col xs={6} md={6}>
+                        <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                            <BarChart width={600} height={300} data={this.state.data}
+                                      margin={{top: 20, right: 30, left: 20, bottom: 5}}>
+                                <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                <YAxis/>
+                                <CartesianGrid strokeDasharray="3 3"/>
+                                <Tooltip/>
+                                <Legend verticalAlign="top" height={36}/>
+                                <Bar dataKey="payment_amount" stackId="a" fill="#8884d8" />
+                                <Bar dataKey="unavailable_balance" stackId="a" fill="#feb2b4" />
+                                <Bar dataKey="disburse_amount" stackId="a" fill="#1C783A" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </Col>
+                </Row>
                     <ReactTable
                         data={this.state.data}
                         columns={columns}

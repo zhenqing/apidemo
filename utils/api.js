@@ -63,6 +63,13 @@ module.exports = {
             .then(function (response) {
                 return response.data;
             });
+    },
+    fetchAccounts: function(account_name) {
+        var encodeURI = window.encodeURI('https://a9test.ibport.com/api/v1/accounts/accountlist?a=1'+'&access_token=b41127cf658eeb348ebc5a9513826bb0')
+        return axios.get(encodeURI)
+            .then(function (response) {
+                return response.data;
+            });
     }
 }
 

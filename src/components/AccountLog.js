@@ -6,20 +6,26 @@ import ReactTooltip from 'react-tooltip';
 import {findDOMNode} from 'react-dom';
 import {ReferenceLine, ComposedChart, LineChart, BarChart, Bar, XAxis,YAxis, Tooltip, CartesianGrid, Line, ResponsiveContainer, Legend} from 'recharts';
 import {Row, Col} from "react-bootstrap";
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 var api = require('../../utils/api.js');
 
 const rawData = [];
+const statusMap = {'' : 0, 'internet loss' : 1, 'No longer needed' : 2, 'BankCard Issue' : 3, 'Computer&Internet Removed' : 4, 'Not Running' : 5,
+    'Seller信息空白' : 6, 'Register Failed': 7, 'computer returned' : 8, 'Bank Card Issue' : 3, 'computer not start' : 9, 'Credit Card Invalid' : 10,
+    'UA' : 11, 'Not Installed' : 12, 'Login Blocked' : 13, 'UI' : 14, 'Password Incorrect' : 15, 'AI' : 16, 'Suspended' : 17, 'AA': 18};
 export default class AccountLog extends React.Component {
     constructor(props) {
         super();
         this.state = {
             data: rawData,
+            accounts: rawData,
             account: props.account || '',
             country: props.country || '',
-            account_name: props.account_name || '',
+            account_name: props.match ? props.account_name || props.match.params.accountName || '' : props.account_name || '',
             business: props.business || '',
             belonging: props.belonging || '',
-            single: 0,
+            single: props.match && props.match.params.accountName ? 1 : 0,
             page: 1,
             pageSize: 10,
             sorted: [{ // the sorting model for the table
@@ -40,6 +46,10 @@ export default class AccountLog extends React.Component {
             .then(function (res) {
                 this.setState({data: res});
             }.bind(this));
+        api.fetchAccounts()
+            .then(function (res) {
+                this.setState({accounts: res});
+            }.bind(this));
     }
 
     search() {
@@ -50,6 +60,17 @@ export default class AccountLog extends React.Component {
     }
     handleChange(e) {
         this.setState({account_name: e.target.value}, () => {
+            api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
+                .then(function (res) {
+                    this.setState({data: res, single: this.state.account_name === "" ? 0 : 1});
+                }.bind(this));
+        })
+    }
+    updateAccountName(newAccountName) {
+        this.setState({
+            account_name: newAccountName.value
+        });
+        this.setState({account_name: newAccountName.value}, () => {
             api.fetchAccountLogs(this.state.account, this.state.country, this.state.account_name, this.state.business, this.state.belonging)
                 .then(function (res) {
                     this.setState({data: res, single: this.state.account_name === "" ? 0 : 1});
@@ -529,6 +550,19 @@ export default class AccountLog extends React.Component {
                 <button onClick={this.handleChange.bind(this)} className="all-account-link" value="">View All Accounts</button>
                 {this.state.single === 1 ? (
                     <div>
+                        <h3>{this.state.account_name} Account Summary</h3>
+                        <Row className="show-grid">
+                            <Col xs={6} md={2}>
+                                Select Account
+                            </Col>
+                            <Col xs={6} md={2}>
+                                <Select
+                                    value={this.state.account_name}
+                                    options={this.state.accounts}
+                                    onChange={this.updateAccountName.bind(this)}>
+                                </Select>
+                            </Col>
+                        </Row>
                     <Row className="show-grid">
                         <Col xs={6} md={4}>
                             <ResponsiveContainer width='100%' aspect={2.0/1.0}>
@@ -589,6 +623,24 @@ export default class AccountLog extends React.Component {
                         </Col>
                     </Row>
                     <Row className="show-grid">
+                        <Col xs={6} md={4}>
+                            <ResponsiveContainer width='100%' aspect={2.0/1.0}>
+                                <ComposedChart
+                                    width={600}
+                                    height={300}
+                                    data={this.state.data}
+                                    margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+                                >
+                                    <XAxis dataKey="log_date" tickLine={true} axisLine={true} />
+                                    <YAxis yAxisId="left" tickCount={10} tickLine={true} axisLine={true} minTickGap={0.5} domain={[0.5, 1]}/>
+                                    <Tooltip />
+                                    <Legend verticalAlign="top" height={36}/>
+                                    <CartesianGrid stroke="#f5f5f5" />
+                                    <Line type="monotone" dataKey="status" stroke="#387908" yAxisId="left" />
+                                    <Line type="monotone" dataKey="statusnum" stroke="#8884d8" yAxisId="left" />
+                                </ComposedChart>
+                            </ResponsiveContainer>
+                        </Col>
                         <Col xs={6} md={4}>
                             <ResponsiveContainer width='100%' aspect={2.0/1.0}>
                                 <ComposedChart
